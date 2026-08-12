@@ -11,7 +11,7 @@ interface NavLink {
 const navlinks: NavLink[] = [
   { id: "1", name: "Home", href: "/" },
   { id: "2", name: "APIs", href: "/apis" },
-  { id: "3", name: "Docs", href: "/docs" },
+  { id: "3", name: "Publish", href: "/Publish" },
 ];
 
 export default function Navbar() {
