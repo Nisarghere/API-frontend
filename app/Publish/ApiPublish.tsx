@@ -112,48 +112,61 @@ const ApiPublish = () => {
                 </button>
               </div>
 
-              <div className="space-y-3">
-                <div className="flex items-center justify-between rounded-lg border border-slate-200 px-4 py-3">
-                  <div className="flex items-center gap-3">
-                    <span className="rounded-md bg-emerald-50 px-2 py-1 text-xs font-bold text-emerald-600">
-                      GET
-                    </span>
+              <div className="relative space-y-3">
+                <div className="group relative rounded-xl border border-slate-200 bg-white p-4 transition hover:border-slate-300">
+                  <div className="flex items-start gap-4 pr-8">
+                    <select className="h-9 w-20 shrink-0 cursor-pointer rounded-full border-0 bg-emerald-50 px-3 text-sm font-semibold text-emerald-600 outline-none">
+                      <option>GET</option>
+                      <option>POST</option>
+                      <option>PUT</option>
+                      <option>DELETE</option>
+                    </select>
 
-                    <div>
-                      <p className="font-mono text-sm font-medium text-slate-800">
-                        /weather/:city
-                      </p>
+                    <div className="min-w-0 flex-1 space-y-3">
+                      <div>
+                        <label className="mb-1.5 block text-xs font-medium text-slate-500">
+                          Endpoint path
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="/users"
+                          className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 font-mono text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-50"
+                        />
+                      </div>
 
-                      <p className="mt-0.5 text-xs text-slate-400">
-                        Get current weather information.
-                      </p>
+                      <div>
+                        <label className="mb-1.5 block text-xs font-medium text-slate-500">
+                          Description (Optional)
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Returns current weather information"
+                          className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-50"
+                        />
+                      </div>
                     </div>
                   </div>
 
-                  <button className="text-xs font-medium text-slate-400 hover:text-red-500">
-                    Remove
-                  </button>
-                </div>
-
-                <div className="flex items-center justify-between rounded-lg border border-slate-200 px-4 py-3">
-                  <div className="flex items-center gap-3">
-                    <span className="rounded-md bg-blue-50 px-2 py-1 text-xs font-bold text-blue-600">
-                      GET
-                    </span>
-
-                    <div>
-                      <p className="font-mono text-sm font-medium text-slate-800">
-                        /forecast/:city
-                      </p>
-
-                      <p className="mt-0.5 text-xs text-slate-400">
-                        Get the weather forecast.
-                      </p>
-                    </div>
-                  </div>
-
-                  <button className="text-xs font-medium text-slate-400 hover:text-red-500">
-                    Remove
+                  <button
+                    type="button"
+                    className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition hover:bg-red-50 hover:text-red-500"
+                    aria-label="Remove endpoint"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M3 6h18" />
+                      <path d="M8 6V4h8v2" />
+                      <path d="M19 6l-1 14H6L5 6" />
+                    </svg>
                   </button>
                 </div>
               </div>
@@ -216,3 +229,8 @@ const ApiPublish = () => {
 };
 
 export default ApiPublish;
+{
+  /* <button className="text-xs font-medium text-slate-400 hover:text-red-500">
+                    Remove
+                  </button> */
+}
