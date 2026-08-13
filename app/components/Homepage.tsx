@@ -186,7 +186,7 @@ const Homepage = () => {
         <h2 className="ml-4 mb-4 text-4xl font-extrabold leading-tight tracking-tight text-slate-600">
           <span className="bg-blue-600 bg-clip-text text-transparent">
             30+
-          </span>{" "}
+          </span> 
           Production-Ready APIs
         </h2>
 
