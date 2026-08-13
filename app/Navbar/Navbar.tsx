@@ -12,6 +12,7 @@ const navlinks: NavLink[] = [
   { id: "1", name: "Home", href: "/" },
   { id: "2", name: "APIs", href: "/apis" },
   { id: "3", name: "Publish", href: "/Publish" },
+  { id: "4", name: "Studio", href: "/Studio" },
 ];
 
 export default function Navbar() {
