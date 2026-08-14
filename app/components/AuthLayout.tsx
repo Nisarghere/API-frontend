@@ -22,10 +22,7 @@ export default function AuthLayout({
     <main className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-[420px]">
         {/* Logo */}
-        <Link
-          href="/"
-          className="flex items-center justify-center gap-2 mb-8"
-        >
+        <Link href="/" className="flex items-center justify-center gap-2 mb-8">
           <div className="h-9 w-9 rounded-lg bg-blue-600 flex items-center justify-center">
             <span className="text-white font-bold text-lg">A</span>
           </div>
@@ -38,13 +35,9 @@ export default function AuthLayout({
         {/* Card */}
         <div className="bg-white border border-slate-200 rounded-2xl px-7 py-8 shadow-sm">
           <div className="text-center mb-7">
-            <h1 className="text-2xl font-semibold text-slate-900">
-              {title}
-            </h1>
+            <h1 className="text-2xl font-semibold text-slate-900">{title}</h1>
 
-            <p className="text-sm text-slate-500 mt-2">
-              {subtitle}
-            </p>
+            <p className="text-sm text-slate-500 mt-2">{subtitle}</p>
           </div>
 
           {children}

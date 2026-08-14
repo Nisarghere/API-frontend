@@ -4,7 +4,7 @@ import SigninPage from './SigninPage'
 const page = () => {
   return (
     <div>
-        {/* <SigninPage/> */}
+        <SigninPage/>
     </div>
   )
 }
