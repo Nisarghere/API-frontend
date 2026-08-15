@@ -1,12 +1,23 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 
-const ApiPublish = () => {
-  const [endpoint, setendpoint] = useState("")
+interface Endpoint{
+  method:string,
+  path:string
+}
 
-  
-  
-  
+const ApiPublish = () => {
+  const [name, setname] = useState("");
+  const [baseUrl, setbaseUrl] = useState("");
+  const [version, setversion] = useState("");
+  const [category, setcategory] = useState("");
+  const [endpoints, setendpoints] = useState<Endpoint[]>([
+    {
+      method: "",
+      path: "",
+    },
+  ]);
+
   return (
     <>
       <div className="min-h-screen bg-[#F6F8FB] px-6 py-10">
@@ -51,6 +62,8 @@ const ApiPublish = () => {
                   </label>
 
                   <input
+                    value={name}
+                    onChange={(e) => setname(e.target.value)}
                     type="text"
                     placeholder="Weather API"
                     className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-slate-400"
@@ -63,6 +76,8 @@ const ApiPublish = () => {
                   </label>
 
                   <input
+                    value={baseUrl}
+                    onChange={(e) => setbaseUrl(e.target.value)}
                     type="url"
                     placeholder="https://api.example.com"
                     className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-slate-400"
@@ -76,6 +91,8 @@ const ApiPublish = () => {
                     </label>
 
                     <input
+                      value={version}
+                      onChange={(e) => setversion(e.target.value)}
                       type="text"
                       placeholder="1.0.0"
                       className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none placeholder:text-slate-400 focus:border-slate-400"
