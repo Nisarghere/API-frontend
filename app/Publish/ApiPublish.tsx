@@ -2,9 +2,10 @@
 import React, { useState } from "react";
 
 interface Endpoint {
-  id:number
+  id: number;
   method: string;
   path: string;
+  description: string;
 }
 
 const ApiPublish = () => {
@@ -14,14 +15,10 @@ const ApiPublish = () => {
   const [category, setcategory] = useState("");
   const [endpoints, setendpoints] = useState<Endpoint[]>([
     {
-      id:1,
+      id: 1,
       method: "",
       path: "",
-    },
-    {
-      id:2,
-      method: "",
-      path: "",
+      description: "",
     },
   ]);
 
@@ -144,16 +141,20 @@ const ApiPublish = () => {
 
               <div className="relative space-y-3">
                 <div className="group relative rounded-xl border border-slate-200 bg-white p-4 transition hover:border-slate-300">
-                  <div className="flex items-start gap-4 pr-8">
+                  <div className="flex flex-col  items-start gap-5  h-100 overflow-x-auto pr-8">
                     {endpoints.map((endpoint) => (
                       <div key={endpoint.id}>
-                      
                         <select
                           value={endpoint.method}
-                          onChange={(e)=> setendpoints((prev) => 
-                          prev.map((item)=>
-                          item.id === endpoint.id ? {...item, method:e.target.value} : item
-                          ) )}
+                          onChange={(e) =>
+                            setendpoints((prev) =>
+                              prev.map((item) =>
+                                item.id === endpoint.id
+                                  ? { ...item, method: e.target.value }
+                                  : item,
+                              ),
+                            )
+                          }
                           className="h-9 w-20 shrink-0 cursor-pointer rounded border-0 bg-emerald-100 px-3 text-sm font-semibold text-emerald-600 outline-none"
                         >
                           <option>GET</option>
@@ -167,6 +168,10 @@ const ApiPublish = () => {
                               Endpoint path
                             </label>
                             <input
+                              value={endpoint.path}
+                              onChange={(e)=> setendpoints((prev)=>
+                              prev.map((item)=>
+                              item.id === endpoint.id ? {...item, e.target.value}:item))}
                               type="text"
                               placeholder="/users"
                               className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 font-mono text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-50"
@@ -178,6 +183,7 @@ const ApiPublish = () => {
                               Description (Optional)
                             </label>
                             <input
+                              value={endpoint.description}
                               type="text"
                               placeholder="Returns current weather information"
                               className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-50"
