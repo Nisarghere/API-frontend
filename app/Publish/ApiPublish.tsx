@@ -1,9 +1,10 @@
 "use client";
 import React, { useState } from "react";
 
-interface Endpoint{
-  method:string,
-  path:string
+interface Endpoint {
+  id:number
+  method: string;
+  path: string;
 }
 
 const ApiPublish = () => {
@@ -13,6 +14,12 @@ const ApiPublish = () => {
   const [category, setcategory] = useState("");
   const [endpoints, setendpoints] = useState<Endpoint[]>([
     {
+      id:1,
+      method: "",
+      path: "",
+    },
+    {
+      id:2,
       method: "",
       path: "",
     },
@@ -138,35 +145,47 @@ const ApiPublish = () => {
               <div className="relative space-y-3">
                 <div className="group relative rounded-xl border border-slate-200 bg-white p-4 transition hover:border-slate-300">
                   <div className="flex items-start gap-4 pr-8">
-                    <select className="h-9 w-20 shrink-0 cursor-pointer rounded border-0 bg-emerald-100 px-3 text-sm font-semibold text-emerald-600 outline-none">
-                      <option>GET</option>
-                      <option>POST</option>
-                      <option>PUT</option>
-                    </select>
+                    {endpoints.map((endpoint) => (
+                      <div key={endpoint.id}>
+                      
+                        <select
+                          value={endpoint.method}
+                          onChange={(e)=> setendpoints((prev) => 
+                          prev.map((item)=>
+                          item.id === endpoint.id ? {...item, method:e.target.value} : item
+                          ) )}
+                          className="h-9 w-20 shrink-0 cursor-pointer rounded border-0 bg-emerald-100 px-3 text-sm font-semibold text-emerald-600 outline-none"
+                        >
+                          <option>GET</option>
+                          <option>POST</option>
+                          <option>PATCH</option>
+                        </select>
 
-                    <div className="min-w-0 flex-1 space-y-3">
-                      <div>
-                        <label className="mb-1.5 block text-xs font-medium text-slate-500">
-                          Endpoint path
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="/users"
-                          className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 font-mono text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-50"
-                        />
-                      </div>
+                        <div className="min-w-0 flex-1 space-y-3">
+                          <div>
+                            <label className="mb-1.5 block text-xs font-medium text-slate-500">
+                              Endpoint path
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="/users"
+                              className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 font-mono text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-50"
+                            />
+                          </div>
 
-                      <div>
-                        <label className="mb-1.5 block text-xs font-medium text-slate-500">
-                          Description (Optional)
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="Returns current weather information"
-                          className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-50"
-                        />
+                          <div>
+                            <label className="mb-1.5 block text-xs font-medium text-slate-500">
+                              Description (Optional)
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="Returns current weather information"
+                              className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-50"
+                            />
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
 
                   <button
