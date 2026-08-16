@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import crypto from 'node:crypto';
 
 interface Endpoint {
   id: number;
@@ -13,14 +14,33 @@ const ApiPublish = () => {
   const [baseUrl, setbaseUrl] = useState("");
   const [version, setversion] = useState("");
   const [category, setcategory] = useState("");
+
   const [endpoints, setendpoints] = useState<Endpoint[]>([
     {
-      id: 1,
+      id: Date.now(),
       method: "",
       path: "",
       description: "",
     },
   ]);
+ 
+  function AddPoint() {
+    setendpoints((prev)=> [...prev,{
+      id: Date.now(),
+      method: "",
+      path: "",
+      description: "",
+    } ])
+  
+  }
+
+
+  const isDisabled = endpoints.some((endpoint)=>
+    endpoint.path.trim() === "" && endpoint.method.trim() === "" 
+  )
+
+     
+  
 
   return (
     <>
@@ -134,7 +154,11 @@ const ApiPublish = () => {
                   </p>
                 </div>
 
-                <button className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50">
+                <button
+                  onClick={AddPoint}
+                  disabled={isDisabled}
+                  className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                >
                   + Add Endpoint
                 </button>
               </div>
@@ -169,9 +193,15 @@ const ApiPublish = () => {
                             </label>
                             <input
                               value={endpoint.path}
-                              onChange={(e)=> setendpoints((prev)=>
-                              prev.map((item)=>
-                              item.id === endpoint.id ? {...item, e.target.value}:item))}
+                              onChange={(e) =>
+                                setendpoints((prev) =>
+                                  prev.map((item) =>
+                                    item.id === endpoint.id
+                                      ? { ...item, path: e.target.value }
+                                      : item,
+                                  ),
+                                )
+                              }
                               type="text"
                               placeholder="/users"
                               className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 font-mono text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-50"
@@ -184,6 +214,15 @@ const ApiPublish = () => {
                             </label>
                             <input
                               value={endpoint.description}
+                              onChange={(e) =>
+                                setendpoints((prev) =>
+                                  prev.map((item) =>
+                                    item.id === endpoint.id
+                                      ? { ...item, description: e.target.value }
+                                      : item,
+                                  ),
+                                )
+                              }
                               type="text"
                               placeholder="Returns current weather information"
                               className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-50"
