@@ -10,16 +10,16 @@ interface Endpoint {
 }
 
 interface ApiSpec {
-  name: string;
-  baseUrl: string;
+  title: string;
+  baseurl: string;
   version: string;
   category: string;
   endpoints: Endpoint[];
 }
 
 const ApiPublish = () => {
-  const [name, setname] = useState("");
-  const [baseUrl, setbaseUrl] = useState("");
+  const [title,setTitle] = useState("");
+  const [baseurl, setBaseUrl] = useState("");
   const [version, setversion] = useState("");
   const [category, setcategory] = useState("");
 
@@ -33,29 +33,28 @@ const ApiPublish = () => {
   ]);
 
   const payload: ApiSpec = {
-    name,
-    baseUrl,
+    title,
+    baseurl,
     version,
     endpoints,
     category,
   };
 
   async function handleApi() {
-    try{
-
+    try {
       const response = await fetch("http://localhost:5000/api/publish", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
       });
 
-      const data = await response.json()
-      console.log(data)
-      
-    } catch(err){
-      console.log("Somethign went wrong : ", err)
+      const data = await response.json();
+      console.log(data);
+    } catch (err) {
+      console.log("Somethign went wrong : ", err);
     }
   }
 
@@ -124,8 +123,8 @@ const ApiPublish = () => {
                   </label>
 
                   <input
-                    value={name}
-                    onChange={(e) => setname(e.target.value)}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                     type="text"
                     placeholder="Weather API"
                     className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-slate-400"
@@ -138,8 +137,8 @@ const ApiPublish = () => {
                   </label>
 
                   <input
-                    value={baseUrl}
-                    onChange={(e) => setbaseUrl(e.target.value)}
+                    value={baseurl}
+                    onChange={(e) => setBaseUrl(e.target.value)}
                     type="url"
                     placeholder="https://api.example.com"
                     className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-slate-400"
@@ -353,8 +352,9 @@ const ApiPublish = () => {
               </button>
 
               <button
-              onClick={handleApi}
-               className="rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700">
+                onClick={handleApi}
+                className="rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700"
+              >
                 Publish API
               </button>
             </div>
@@ -366,4 +366,3 @@ const ApiPublish = () => {
 };
 
 export default ApiPublish;
- 

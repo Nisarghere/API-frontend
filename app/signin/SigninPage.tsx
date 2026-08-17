@@ -6,44 +6,41 @@ import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
 interface SigninPayload {
-  email: string,
-  password:string
+  email: string;
+  password: string;
 }
 
 export default function SigninPage() {
-  const [email, setemail] = useState("")
-  const [password, setpassword] = useState("")
-
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("");
 
   async function HandleSignIn(e: React.FormEvent<HTMLFormElement>) {
-      e.preventDefault();
-  
-      
-  
-      const payload: SigninPayload = {email, password}
-      
-      try {
-        const response = await fetch("http://localhost:5000/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        });
-        const data = await response.json();
-        console.log(data);
-  
-        if (response.ok) {
-          toast("Login successful");
-        } else {
-          toast(data.message || "Login failed"); // show backend's actual error if it sends one
-        }
-      } catch (error) {
-        console.log("something went wrong", error);
-      }
-    }
+    e.preventDefault();
 
-  
+    const payload: SigninPayload = { email, password };
+
+    try {
+      const response = await fetch("http://localhost:5000/auth/login", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json();
+      console.log(data);
+
+      if (response.ok) {
+        toast("Login successful");
+      } else {
+        toast(data.message || "Login failed"); // show backend's actual error if it sends one
+      }
+    } catch (error) {
+      console.log("something went wrong", error);
+    }
+  }
+
   return (
     <AuthLayout
       title="Welcome back"
@@ -52,23 +49,23 @@ export default function SigninPage() {
       bottomLinkText="Sign up"
       bottomLinkHref="/signup"
     >
-      <ToastContainer/>
+      <ToastContainer />
       <form onSubmit={HandleSignIn} className="space-y-4">
-         <div>
+        <div>
           <label className="block text-sm font-medium text-slate-700 mb-1.5">
             Email
           </label>
 
           <input
-          value={email}
-          onChange={(e)=> setemail(e.target.value)}
+            value={email}
+            onChange={(e) => setemail(e.target.value)}
             type="email"
             placeholder="you@example.com"
             className="w-full h-11 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-blue-500 focus:ring-3 focus:ring-blue-100"
           />
         </div>
 
-         <div>
+        <div>
           <div className="flex items-center justify-between mb-1.5">
             <label className="text-sm font-medium text-slate-700">
               Password
@@ -83,15 +80,15 @@ export default function SigninPage() {
           </div>
 
           <input
-           value={password}
-          onChange={(e)=> setpassword(e.target.value)}
+            value={password}
+            onChange={(e) => setpassword(e.target.value)}
             type="password"
             placeholder="••••••••"
             className="w-full h-11 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-blue-500 focus:ring-3 focus:ring-blue-100"
           />
         </div>
 
-         <button
+        <button
           type="submit"
           className="w-full h-11 mt-2 rounded-lg bg-blue-600 text-white text-sm font-medium transition hover:bg-blue-700 active:bg-blue-800"
         >
