@@ -23,16 +23,14 @@ const APicard = () => {
         <span className="text-xs font-medium text-slate-400">v1.0.0</span>
       </div>
 
-      {/* Description */}
-      <div className="px-3 pt-3">
+       <div className="px-3 pt-3">
         <p className="line-clamp-2 text-sm leading-5 text-slate-500">
           Get current weather, forecasts and air-quality information for cities
           around the world.
         </p>
       </div>
 
-      {/* Metadata */}
-      <div className="flex items-center gap-3 px-3 py-4 text-xs text-slate-500">
+       <div className="flex items-center gap-3 px-3 py-4 text-xs text-slate-500">
         <span>
           <span className="font-semibold text-slate-700">3</span> endpoints
         </span>
@@ -42,11 +40,9 @@ const APicard = () => {
         <span>API Key</span>
       </div>
 
-      {/* Divider */}
-      <div className="border-t border-slate-200" />
+       <div className="border-t border-slate-200" />
 
-      {/* Footer */}
-      <div className="flex items-center justify-between px-3 py-3">
+       <div className="flex items-center justify-between px-3 py-3">
         <span className="text-sm font-medium text-emerald-600">Free</span>
 
         <button className="cursor-pointer rounded-full bg-[#6366F1] px-4 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-[#5558e8]">

@@ -1,12 +1,20 @@
 "use client";
 import React, { useState } from "react";
-import crypto from 'node:crypto';
+import crypto from "node:crypto";
 
 interface Endpoint {
   id: number;
   method: string;
   path: string;
   description: string;
+}
+
+interface ApiSpec {
+  name: string;
+  baseUrl: string;
+  version: string;
+  category: string;
+  endpoints: Endpoint[];
 }
 
 const ApiPublish = () => {
@@ -23,24 +31,54 @@ const ApiPublish = () => {
       description: "",
     },
   ]);
- 
-  function AddPoint() {
-    setendpoints((prev)=> [...prev,{
-      id: Date.now(),
-      method: "",
-      path: "",
-      description: "",
-    } ])
-  
+
+  const payload: ApiSpec = {
+    name,
+    baseUrl,
+    version,
+    endpoints,
+    category,
+  };
+
+  async function handleApi() {
+    try{
+
+      const response = await fetch("http://localhost:5000/api/publish", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json()
+      console.log(data)
+      
+    } catch(err){
+      console.log("Somethign went wrong : ", err)
+    }
   }
 
+  function AddPoint() {
+    setendpoints((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        method: "",
+        path: "",
+        description: "",
+      },
+    ]);
+  }
 
-  const isDisabled = endpoints.some((endpoint)=>
-    endpoint.path.trim() === "" && endpoint.method.trim() === "" 
-  )
+  function DeleteEndpoint(id: number) {
+    const newEndpoint = endpoints.filter((endpoint) => endpoint.id !== id);
+    setendpoints(newEndpoint);
+  }
 
-     
-  
+  const isDisabled = endpoints.some(
+    (endpoint) => endpoint.path.trim() === "" && endpoint.method.trim() === "",
+  );
 
   return (
     <>
@@ -128,7 +166,11 @@ const ApiPublish = () => {
                       Category
                     </label>
 
-                    <select className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 outline-none focus:border-slate-400">
+                    <select
+                      value={category}
+                      onChange={(e) => setcategory(e.target.value)}
+                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 outline-none focus:border-slate-400"
+                    >
                       <option>Select category</option>
                       <option>Weather</option>
                       <option>Finance</option>
@@ -163,98 +205,105 @@ const ApiPublish = () => {
                 </button>
               </div>
 
-              <div className="relative space-y-3">
-                <div className="group relative rounded-xl border border-slate-200 bg-white p-4 transition hover:border-slate-300">
-                  <div className="flex flex-col  items-start gap-5  h-100 overflow-x-auto pr-8">
-                    {endpoints.map((endpoint) => (
-                      <div key={endpoint.id}>
-                        <select
-                          value={endpoint.method}
-                          onChange={(e) =>
-                            setendpoints((prev) =>
-                              prev.map((item) =>
-                                item.id === endpoint.id
-                                  ? { ...item, method: e.target.value }
-                                  : item,
-                              ),
-                            )
-                          }
-                          className="h-9 w-20 shrink-0 cursor-pointer rounded border-0 bg-emerald-100 px-3 text-sm font-semibold text-emerald-600 outline-none"
-                        >
-                          <option>GET</option>
-                          <option>POST</option>
-                          <option>PATCH</option>
-                        </select>
+              <div className="space-y-4">
+                {endpoints.map((endpoint) => (
+                  <div
+                    key={endpoint.id}
+                    className="rounded-xl border border-slate-200 bg-white p-4 transition hover:border-slate-300"
+                  >
+                    <div className="flex w-full items-start gap-5">
+                      <select
+                        value={endpoint.method}
+                        onChange={(e) =>
+                          setendpoints((prev) =>
+                            prev.map((item) =>
+                              item.id === endpoint.id
+                                ? { ...item, method: e.target.value }
+                                : item,
+                            ),
+                          )
+                        }
+                        className="mt-6 h-9 w-20 shrink-0 cursor-pointer rounded bg-emerald-100 px-3 text-sm font-semibold text-emerald-600 outline-none"
+                      >
+                        <option>GET</option>
+                        <option>POST</option>
+                        <option>PATCH</option>
+                      </select>
 
-                        <div className="min-w-0 flex-1 space-y-3">
-                          <div>
-                            <label className="mb-1.5 block text-xs font-medium text-slate-500">
+                      {/* Fields */}
+                      <div className="min-w-0 flex-1 space-y-3">
+                        <div>
+                          <div className="mb-1.5 flex items-center justify-between">
+                            <label className="block text-xs font-medium text-slate-500">
                               Endpoint path
                             </label>
-                            <input
-                              value={endpoint.path}
-                              onChange={(e) =>
-                                setendpoints((prev) =>
-                                  prev.map((item) =>
-                                    item.id === endpoint.id
-                                      ? { ...item, path: e.target.value }
-                                      : item,
-                                  ),
-                                )
-                              }
-                              type="text"
-                              placeholder="/users"
-                              className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 font-mono text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-50"
-                            />
+
+                            <button
+                              type="button"
+                              onClick={() => DeleteEndpoint(endpoint.id)}
+                              className="rounded-lg p-1 text-slate-400 transition hover:bg-red-50 hover:text-red-500"
+                              aria-label="Remove endpoint"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <path d="M3 6h18" />
+                                <path d="M8 6V4h8v2" />
+                                <path d="M19 6l-1 14H6L5 6" />
+                              </svg>
+                            </button>
                           </div>
 
-                          <div>
-                            <label className="mb-1.5 block text-xs font-medium text-slate-500">
-                              Description (Optional)
-                            </label>
-                            <input
-                              value={endpoint.description}
-                              onChange={(e) =>
-                                setendpoints((prev) =>
-                                  prev.map((item) =>
-                                    item.id === endpoint.id
-                                      ? { ...item, description: e.target.value }
-                                      : item,
-                                  ),
-                                )
-                              }
-                              type="text"
-                              placeholder="Returns current weather information"
-                              className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-50"
-                            />
-                          </div>
+                          <input
+                            value={endpoint.path}
+                            onChange={(e) =>
+                              setendpoints((prev) =>
+                                prev.map((item) =>
+                                  item.id === endpoint.id
+                                    ? { ...item, path: e.target.value }
+                                    : item,
+                                ),
+                              )
+                            }
+                            type="text"
+                            placeholder="/users"
+                            className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 font-mono text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-50"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="mb-1.5 block text-xs font-medium text-slate-500">
+                            Description (Optional)
+                          </label>
+
+                          <input
+                            value={endpoint.description}
+                            onChange={(e) =>
+                              setendpoints((prev) =>
+                                prev.map((item) =>
+                                  item.id === endpoint.id
+                                    ? { ...item, description: e.target.value }
+                                    : item,
+                                ),
+                              )
+                            }
+                            type="text"
+                            placeholder="Returns current weather information"
+                            className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-50"
+                          />
                         </div>
                       </div>
-                    ))}
+                    </div>
                   </div>
-
-                  <button
-                    type="button"
-                    className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition hover:bg-red-50 hover:text-red-500"
-                    aria-label="Remove endpoint"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M3 6h18" />
-                      <path d="M8 6V4h8v2" />
-                      <path d="M19 6l-1 14H6L5 6" />
-                    </svg>
-                  </button>
-                </div>
+                ))}
               </div>
             </section>
 
@@ -303,7 +352,9 @@ const ApiPublish = () => {
                 Cancel
               </button>
 
-              <button className="rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700">
+              <button
+              onClick={handleApi}
+               className="rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700">
                 Publish API
               </button>
             </div>
@@ -315,8 +366,4 @@ const ApiPublish = () => {
 };
 
 export default ApiPublish;
-{
-  /* <button className="text-xs font-medium text-slate-400 hover:text-red-500">
-                    Remove
-                  </button> */
-}
+ 
