@@ -46,16 +46,7 @@ const Explore = () => {
           <div className="flex justify-center">
             <div className="grid grid-cols-3  gap-9  m-3">
               <APicard />
-              <APicard />
-              <APicard />
-              <APicard />
-              <APicard />
-              <APicard />
-              <APicard />
-              <APicard />
-              <APicard />
-              <APicard />
-              <APicard />
+             
             </div>
           </div>
         </div>

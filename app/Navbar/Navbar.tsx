@@ -28,15 +28,14 @@ export default function Navbar() {
     return () => removeEventListener("scroll", handleScroll);
   }, []);
 
-
   return (
     <nav
       className={`sticky top-0 z-50 grid grid-cols-3 items-center border-b border-transparent bg-white/90 backdrop-blur-xl transition-all duration-300 ${
         scrolled ? "px-8 py-2 shadow-md" : "px-8 py-3"
       }`}
     >
-      {/* Logo */}
-      <Link href={"/"}
+       <Link
+        href={"/"}
         className={`font-bold cursor-pointer text-emerald-800 transition-all duration-300 ${
           scrolled ? "text-xl" : "text-2xl"
         }`}
@@ -61,7 +60,8 @@ export default function Navbar() {
 
       {/* Buttons */}
       <div className="flex justify-end gap-3">
-        <Link href={"signin"}
+        <Link
+          href={"signin"}
           className={`rounded-full font-semibold transition-all duration-300 ${
             scrolled ? "px-4 py-1.5 text-sm" : "px-4 py-2 text-base"
           }`}
@@ -69,7 +69,8 @@ export default function Navbar() {
           Sign In
         </Link>
 
-        <Link href={"signup"}
+        <Link
+          href={"signup"}
           className={`rounded-full bg-emerald-400 font-bold text-slate-900 transition-all duration-300 hover:bg-emerald-300 ${
             scrolled ? "px-5 py-1.5 text-sm" : "px-5 py-2 text-base"
           }`}

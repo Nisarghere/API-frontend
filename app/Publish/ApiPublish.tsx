@@ -17,11 +17,22 @@ interface ApiSpec {
   endpoints: Endpoint[];
 }
 
+interface ApiResponse {
+  title: string;
+  logo: string | null;
+  baseurl: string;
+  version: string;
+  category: string;
+  endpoints: Endpoint[];
+}
+
 const ApiPublish = () => {
-  const [title,setTitle] = useState("");
+  const [title, setTitle] = useState("");
   const [baseurl, setBaseUrl] = useState("");
   const [version, setversion] = useState("");
   const [category, setcategory] = useState("");
+  const [logo, setlogo] = useState<File | null>(null);
+  const [data, setdata] = useState<ApiResponse | null>(null);
 
   const [endpoints, setendpoints] = useState<Endpoint[]>([
     {
@@ -32,23 +43,21 @@ const ApiPublish = () => {
     },
   ]);
 
-  const payload: ApiSpec = {
-    title,
-    baseurl,
-    version,
-    endpoints,
-    category,
-  };
-
   async function handleApi() {
+    const formData = new FormData();
+
+    formData.append("title", title);
+    formData.append("baseurl", baseurl);
+    formData.append("version", version);
+    formData.append("category", category);
+    formData.append("endpoints", JSON.stringify(endpoints));
+    if (logo) formData.append("logo", logo);
+
     try {
       const response = await fetch("http://localhost:5000/api/publish", {
         method: "POST",
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
       const data = await response.json();
@@ -111,9 +120,19 @@ const ApiPublish = () => {
                   <label className="mb-2 block text-sm font-medium text-slate-700">
                     API Logo
                   </label>
-                  <label className="flex h-20 w-20 items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 text-xs text-slate-400 transition hover:border-slate-400 hover:bg-slate-100">
-                    Upload
-                    <input type="file" className="hidden" />
+
+                  <label className="flex h-30 w-30 items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 text-xs text-slate-400 transition hover:border-slate-400 hover:bg-slate-100">
+                    {logo ? (
+                      <img src={URL.createObjectURL(logo)} alt="" />
+                    ) : (
+                      <div className="text-[18px] font-semibold">Upload</div>
+                    )}
+
+                    <input
+                      onChange={(e) => setlogo(e.target.files?.[0] ?? null)}
+                      type="file"
+                      className="hidden"
+                    />
                   </label>
                 </div>
 
