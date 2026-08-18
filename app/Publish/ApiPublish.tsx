@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import crypto from "node:crypto";
 
 interface Endpoint {
-  id: number;
+  id: string;
   method: string;
   path: string;
   description: string;
@@ -36,7 +36,7 @@ const ApiPublish = () => {
 
   const [endpoints, setendpoints] = useState<Endpoint[]>([
     {
-      id: Date.now(),
+      id: crypto.randomUUID(),
       method: "",
       path: "",
       description: "",
@@ -71,7 +71,7 @@ const ApiPublish = () => {
     setendpoints((prev) => [
       ...prev,
       {
-        id: Date.now(),
+        id: crypto.randomUUID(),
         method: "",
         path: "",
         description: "",
@@ -79,7 +79,7 @@ const ApiPublish = () => {
     ]);
   }
 
-  function DeleteEndpoint(id: number) {
+  function DeleteEndpoint(id: string) {
     const newEndpoint = endpoints.filter((endpoint) => endpoint.id !== id);
     setendpoints(newEndpoint);
   }
@@ -248,7 +248,7 @@ const ApiPublish = () => {
                         <option>PATCH</option>
                       </select>
 
-                      {/* Fields */}
+                      {/* path and desc */}
                       <div className="min-w-0 flex-1 space-y-3">
                         <div>
                           <div className="mb-1.5 flex items-center justify-between">

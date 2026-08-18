@@ -1,33 +1,34 @@
-"use client";
 import Navbar from "@/app/Navbar/Navbar";
-import React, { useState } from "react";
+import ApiHeader from "./ApiHeader";
+import ApiOverview from "./ApiOverview";
+import CodeExamples from "./Codeexamples";
+import EndpointList from "./EndpointList";
+import ResponseExample from "./ResponseExample";
 
-import ApiDetails from "./Api-details";
-import ReqRes from "./ReqRes";
-
-const page = () => {
-
-
+ 
+const ApiDetailsPage = () => {
   return (
     <>
-      <Navbar />
-      <div className="grid  grid-cols-[1fr_2fr] bg-[#F8FAFC] border m-3 border-[#E7E5E4] rounded-xl min-h-screen">
-        <section className="w-[400px]  p-4">
-         <ApiDetails />
-        </section>
+    <Navbar/>
+    <div className="min-h-screen bg-slate-50 px-6 py-8">
+      <div className="mx-auto max-w-6xl space-y-6">
+        
 
-        <section className="border border-[#E2E8F0] m-4 rounded">
-          <ReqRes/>
-        </section>
+
+        <ApiHeader />
+
+        <ApiOverview />
+
+        <EndpointList />
+
+        <CodeExamples />
+
+        <ResponseExample />
+
       </div>
+    </div>
     </>
   );
 };
 
-export default page;
-
-//       <div className="mt-5 p-3">
-//   {/* Description  */}
-//   {/* <h3 className="font-bold">Description</h3> */}
-
-// </div>2
+export default ApiDetailsPage;

@@ -1,8 +1,49 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import SearchBar from "./SearchBar";
 import APicard from "./APicard";
 
+interface Endpoint {
+  _id: string;
+  method: string;
+  path: string;
+  description: string;
+}
+
+interface Api {
+  _id: string;
+  title: string;
+  baseurl: string;
+  version: string;
+  category: string;
+  logo: string | null;
+  endpoints: Endpoint[];
+}
+
+interface ApiRequest {
+  message: string;
+  apis: Api[];
+}
+
 const Explore = () => {
+  const [data, setdata] = useState<ApiRequest | null>(null);
+  const [loading, setloading] = useState(true);
+
+  useEffect(() => {
+    async function handleApiResponse() {
+      const response = await fetch("http://localhost:5000/apis/", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      const data = await response.json();
+      setdata(data);
+      setloading(false);
+      console.log(data);
+    }
+    handleApiResponse();
+  }, []);
+
   return (
     <div>
       <div className="grid grid-cols-[250px_1fr] min-h-screen border border-[#E4E4E7]">
@@ -44,10 +85,24 @@ const Explore = () => {
           </div>
           <h2 className="font-semibold text-xl  ml-5 p-3">ALL APIs </h2>
           <div className="flex justify-center">
-            <div className="grid grid-cols-3  gap-9  m-3">
-              <APicard />
-             
-            </div>
+            {loading ? (
+              <div className="flex justify-center items-center h-[50vh] ">
+                Loading APIs
+              </div>
+            ) : (
+              <div className="grid grid-cols-3 gap-9 m-3">
+                {data?.apis.map((item) => (
+                  <APicard
+                    key={item._id}
+                    category={item.category}
+                    title={item.title}
+                    logo={item.logo}
+                    endpoints={item.endpoints}
+                    version={item.version}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
