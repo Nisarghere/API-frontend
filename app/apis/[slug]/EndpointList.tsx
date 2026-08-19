@@ -1,22 +1,14 @@
-const endpoints = [
-  {
-    method: "GET",
-    path: "/weather/:city",
-    description: "Get the current weather for a city.",
-  },
-  {
-    method: "GET",
-    path: "/forecast/:city",
-    description: "Get the weather forecast for a city.",
-  },
-  {
-    method: "GET",
-    path: "/air-quality/:city",
-    description: "Get air quality information for a city.",
-  },
-];
+interface Endpoint{
+  method:string;
+  path:string;
+  description:string |null;
+}
 
-const EndpointList = () => {
+interface ApiSpec {
+  endpoints:Endpoint[]
+}
+
+const EndpointList = ({endpoints}:ApiSpec) => {
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-6">
 

@@ -1,46 +1,56 @@
-const ApiOverview = () => {
-  return (
-    <div className="rounded-xl border border-slate-200 bg-white p-6">
+// interface RateLimit {
+//   window:number;
+//   requests:number;
+// }
 
-      <h2 className="mb-5 text-lg font-semibold text-slate-900">
-        API Overview
-      </h2>
+// interface ApiSpec {
+//   baseurl:string;
+//   ratelimit:RateLimit
+// }
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+// const ApiOverview = ({baseurl, ratelimit}:ApiSpec) => {
+//   return (
+//     <div className="rounded-xl border border-slate-200 bg-white p-6">
 
-        <div className="rounded-lg border border-slate-200 p-4">
-          <p className="text-xs font-medium uppercase text-slate-400">
-            Base URL
-          </p>
+//       <h2 className="mb-5 text-lg font-semibold text-slate-900">
+//         API Overview
+//       </h2>
 
-          <p className="mt-2 break-all font-mono text-sm text-slate-700">
-            https://api.example.com/v1
-          </p>
-        </div>
+//       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 
-        <div className="rounded-lg border border-slate-200 p-4">
-          <p className="text-xs font-medium uppercase text-slate-400">
-            Authentication
-          </p>
+//         <div className="rounded-lg border border-slate-200 p-4">
+//           <p className="text-xs font-medium uppercase text-slate-400">
+//             Base URL
+//           </p>
 
-          <p className="mt-2 text-sm text-slate-700">
-            API Key
-          </p>
-        </div>
+//           <p className="mt-2 break-all font-mono text-sm text-slate-700">
+//             {baseurl}
+//           </p>
+//         </div>
 
-        <div className="rounded-lg border border-slate-200 p-4">
-          <p className="text-xs font-medium uppercase text-slate-400">
-            Rate Limit
-          </p>
+//         <div className="rounded-lg border border-slate-200 p-4">
+//           <p className="text-xs font-medium uppercase text-slate-400">
+//             Authentication
+//           </p>
 
-          <p className="mt-2 text-sm text-slate-700">
-            100 requests / minute
-          </p>
-        </div>
+//           <p className="mt-2 text-sm text-slate-700">
+//             API Key
+//           </p>
+//         </div>
 
-      </div>
-    </div>
-  );
-};
+//         <div className="rounded-lg border border-slate-200 p-4">
+//           <p className="text-xs font-medium uppercase text-slate-400">
+//             Rate Limit
+//           </p>
 
-export default ApiOverview;
+//           <p className="mt-2 text-sm text-slate-700">
+//             {ratelimit.requests} requests / {ratelimit.window}s
+//           </p>
+//         </div>
+
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ApiOverview;

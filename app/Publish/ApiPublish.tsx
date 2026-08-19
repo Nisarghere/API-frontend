@@ -1,6 +1,5 @@
 "use client";
-import React, { useState } from "react";
-import crypto from "node:crypto";
+import React, { useEffect, useEffectEvent, useState } from "react";
 
 interface Endpoint {
   id: string;
@@ -14,6 +13,7 @@ interface ApiSpec {
   baseurl: string;
   version: string;
   category: string;
+  description:string;
   endpoints: Endpoint[];
 }
 
@@ -23,21 +23,24 @@ interface ApiResponse {
   baseurl: string;
   version: string;
   category: string;
+  description:string;
   endpoints: Endpoint[];
 }
 
 const ApiPublish = () => {
   const [title, setTitle] = useState("");
+  const [description, setdescription] = useState("");
   const [baseurl, setBaseUrl] = useState("");
   const [version, setversion] = useState("");
   const [category, setcategory] = useState("");
   const [logo, setlogo] = useState<File | null>(null);
   const [data, setdata] = useState<ApiResponse | null>(null);
+  const [logopreview, setlogopreview] = useState("")
 
   const [endpoints, setendpoints] = useState<Endpoint[]>([
     {
       id: crypto.randomUUID(),
-      method: "",
+      method: "GET",
       path: "",
       description: "",
     },
@@ -50,6 +53,7 @@ const ApiPublish = () => {
     formData.append("baseurl", baseurl);
     formData.append("version", version);
     formData.append("category", category);
+    formData.append("description", description)
     formData.append("endpoints", JSON.stringify(endpoints));
     if (logo) formData.append("logo", logo);
 
@@ -72,7 +76,7 @@ const ApiPublish = () => {
       ...prev,
       {
         id: crypto.randomUUID(),
-        method: "",
+        method: "GET",
         path: "",
         description: "",
       },
@@ -88,6 +92,21 @@ const ApiPublish = () => {
     (endpoint) => endpoint.path.trim() === "" && endpoint.method.trim() === "",
   );
 
+  useEffect(() => {
+
+    if (!logo){
+      setlogopreview("")
+      return;
+    }
+      
+    const url = URL.createObjectURL(logo)
+    setlogopreview(url)
+
+    return ()=> URL.revokeObjectURL(url)
+  }, [logo])
+  
+  
+  
   return (
     <>
       <div className="min-h-screen bg-[#F6F8FB] px-6 py-10">
@@ -116,38 +135,50 @@ const ApiPublish = () => {
               </div>
 
               <div className="space-y-5">
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
-                    API Logo
-                  </label>
+                <div className="flex justify-between md:flex-row gap-8 ">
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                      API Logo
+                    </label>
 
-                  <label className="flex h-30 w-30 items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 text-xs text-slate-400 transition hover:border-slate-400 hover:bg-slate-100">
-                    {logo ? (
-                      <img src={URL.createObjectURL(logo)} alt="" />
-                    ) : (
-                      <div className="text-[18px] font-semibold">Upload</div>
-                    )}
+                    <label className="flex h-30 w-30 items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 text-xs text-slate-400 transition hover:border-slate-400 hover:bg-slate-100">
+                      {logo && logopreview ? (
+                        <img src={logopreview} alt="AVatar.png" />
+                      ) : (
+                        <div className="text-[18px] font-semibold">Upload</div>
+                      )}
+
+                      <input
+                        onChange={(e) => setlogo(e.target.files?.[0] ?? null)}
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp"
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                  <div className="flex flex-col w-130 ">
+                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                      API Name
+                    </label>
 
                     <input
-                      onChange={(e) => setlogo(e.target.files?.[0] ?? null)}
-                      type="file"
-                      className="hidden"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      type="text"
+                      placeholder="Weather API"
+                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-slate-400"
                     />
-                  </label>
-                </div>
-
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
-                    API Name
-                  </label>
-
-                  <input
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    type="text"
-                    placeholder="Weather API"
-                    className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-slate-400"
-                  />
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-slate-700">
+                        Description
+                      </label>
+                      <textarea
+                        value={description}
+                        onChange={(e) => setdescription(e.target.value)}
+                        className="w-full border rounded max-h-50 min-h-30 border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-slate-400"
+                      ></textarea>
+                    </div>
+                  </div>
                 </div>
 
                 <div>

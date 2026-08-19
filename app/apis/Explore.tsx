@@ -31,7 +31,7 @@ const Explore = () => {
 
   useEffect(() => {
     async function handleApiResponse() {
-      const response = await fetch("http://localhost:5000/apis/", {
+      const response = await fetch("http://localhost:5000/api/", {
         method: "GET",
         credentials: "include",
       });
@@ -94,8 +94,10 @@ const Explore = () => {
                 {data?.apis.map((item) => (
                   <APicard
                     key={item._id}
+                    index={item._id}
                     category={item.category}
                     title={item.title}
+                    description={item.description}
                     logo={item.logo}
                     endpoints={item.endpoints}
                     version={item.version}
