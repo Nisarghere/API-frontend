@@ -65,8 +65,7 @@ const ApiPublish = () => {
       });
 
       const data = await response.json();
-      console.log(data);
-    } catch (err) {
+     } catch (err) {
       console.log("Somethign went wrong : ", err);
     }
   }

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 interface RateLimit {
   window: number;
@@ -19,11 +20,45 @@ interface ApiSpec {
   apiKey?: string | null;
 }
 
-const ApiInfo = ({slug,logo,title,category,version,description,baseurl,ratelimit,apiKey: initialApiKey,}: ApiSpec) => {
-
+const ApiInfo = ({
+  slug,
+  logo,
+  title,
+  category,
+  version,
+  description,
+  baseurl,
+  ratelimit,
+  apiKey: initialApiKey,
+}: ApiSpec) => {
   const [apiKey, setApiKey] = useState<string | null>(initialApiKey ?? null);
+  const [apiKeyPreview, setapiKeyPreview] = useState<string | null>(null);
+  console.log(apiKeyPreview);
+  const [newApiKey, setnewApiKey] = useState<string | null>(
+    initialApiKey ?? null,
+  );
 
+  const [id, setid] = useState("");
+  console.log(id);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    async function getSubApi() {
+      const response = await fetch(
+        `http://localhost:5000/api/${slug}/apiPreview`,
+        {
+          method: "GET",
+          credentials: "include",
+        },
+      );
+
+      const data = await response.json();
+      setapiKeyPreview(data.apiKeyPreview);
+      setid(data.subscriptionId)
+    }
+
+    getSubApi();
+  }, []);
 
   async function SubscribeApi() {
     try {
@@ -34,19 +69,67 @@ const ApiInfo = ({slug,logo,title,category,version,description,baseurl,ratelimit
         {
           method: "POST",
           credentials: "include",
-        }
+        },
       );
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Subscription couldn't complete");
+        console.log(data.message);
       }
 
       setApiKey(data.apiKey);
-
-    } catch (error) {
+      toast.success("Subscribed successfully");
+    } catch (error: any) {
+      toast.error(error.message || "Something went wrong");
       console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function rotateApi() {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `http://localhost:5000/api/${slug}/${id}/rotate`,
+        {
+          method: "PATCH",
+          credentials: "include",
+        },
+      );
+
+      const data = await response.json();
+      console.log(data.message)
+      setApiKey(data.apiKey)
+      setapiKeyPreview(data.apiKeyPreview)
+
+      if (!response.ok) {
+        throw new Error(data.message || "Rotation failed");
+      }
+
+      setnewApiKey(data.apiKey);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function revokeApi() {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `http://localhost:5000/api/${slug}/${id}/revoke`,
+        {
+          method: "PATCH",
+          credentials: "include",
+        },
+      );
+
+      const data = await response.json();
+    } catch (error) {
+      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -54,10 +137,9 @@ const ApiInfo = ({slug,logo,title,category,version,description,baseurl,ratelimit
 
   return (
     <div className="space-y-6">
-
-       <div className="rounded-xl border border-slate-200 bg-white p-6">
+      <ToastContainer />
+      <div className="rounded-xl border border-slate-200 bg-white p-6">
         <div className="flex items-start justify-between gap-6">
-
           <div className="flex gap-4">
             <div className="flex h-16 w-16 items-center justify-center rounded-xl border border-slate-200 bg-slate-50">
               <img
@@ -99,26 +181,19 @@ const ApiInfo = ({slug,logo,title,category,version,description,baseurl,ratelimit
                 : "bg-blue-600 hover:bg-blue-700"
             }`}
           >
-            {apiKey
-              ? "Subscribed"
-              : loading
-                ? "Subscribing..."
-                : "Subscribe"}
+            {apiKey ? "Subscribed" : loading ? "Subscribing..." : "Subscribe"}
           </button>
-
         </div>
       </div>
 
       {/* API Overview section */}
       <div className="rounded-xl border border-slate-200 bg-white p-6">
-
         <h2 className="mb-5 text-lg font-semibold text-slate-900">
           API Overview
         </h2>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-
-           <div className="rounded-lg border border-slate-200 p-4">
+          <div className="rounded-lg border border-slate-200 p-4">
             <p className="text-xs font-medium uppercase text-slate-400">
               Base URL
             </p>
@@ -128,20 +203,29 @@ const ApiInfo = ({slug,logo,title,category,version,description,baseurl,ratelimit
             </p>
           </div>
 
-           <div className="rounded-lg border border-slate-200 p-4">
-            <p className="text-xs font-medium uppercase text-slate-400">
-              Authentication
-            </p>
+          <div className="rounded-lg border border-slate-200 p-4">
+            <div className="flex justify-between items-center">
+              <p className="text-xs font-medium uppercase text-slate-400">
+                Authentication
+              </p>
+
+              <div className="flex gap-4">
+                <button onClick={rotateApi}>Rotate</button>
+                <button onClick={revokeApi}>Revoke</button>
+              </div>
+            </div>
 
             {apiKey ? (
               <div className="mt-2">
-                <p className="mb-1 text-xs text-slate-400">
-                  Your API Key
-                </p>
+                <p className="mb-1 text-xs text-slate-400">Your API Key</p>
 
                 <p className="break-all font-mono text-sm text-slate-700">
                   {apiKey}
                 </p>
+              </div>
+            ) : apiKeyPreview ? (
+              <div>
+                <p>{apiKeyPreview}••••••••••••</p>
               </div>
             ) : (
               <p className="mt-2 text-sm text-slate-700">
@@ -150,7 +234,7 @@ const ApiInfo = ({slug,logo,title,category,version,description,baseurl,ratelimit
             )}
           </div>
 
-           <div className="rounded-lg border border-slate-200 p-4">
+          <div className="rounded-lg border border-slate-200 p-4">
             <p className="text-xs font-medium uppercase text-slate-400">
               Rate Limit
             </p>
@@ -159,10 +243,8 @@ const ApiInfo = ({slug,logo,title,category,version,description,baseurl,ratelimit
               {ratelimit.requests} requests / {ratelimit.window}s
             </p>
           </div>
-
         </div>
       </div>
-
     </div>
   );
 };
