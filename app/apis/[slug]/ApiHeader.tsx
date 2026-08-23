@@ -39,7 +39,6 @@ const ApiInfo = ({
   );
 
   const [id, setid] = useState("");
-  console.log(id);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -54,7 +53,7 @@ const ApiInfo = ({
 
       const data = await response.json();
       setapiKeyPreview(data.apiKeyPreview);
-      setid(data.subscriptionId)
+      setid(data.subscriptionId);
     }
 
     getSubApi();
@@ -100,13 +99,11 @@ const ApiInfo = ({
       );
 
       const data = await response.json();
-      console.log(data.message)
-      setApiKey(data.apiKey)
-      setapiKeyPreview(data.apiKeyPreview)
-
       if (!response.ok) {
         throw new Error(data.message || "Rotation failed");
       }
+      setApiKey(data.apiKey);
+      setapiKeyPreview(data.apiKeyPreview);
 
       setnewApiKey(data.apiKey);
     } catch (error) {
@@ -225,12 +222,14 @@ const ApiInfo = ({
               </div>
             ) : apiKeyPreview ? (
               <div>
+                <p className="mb-1 text-xs text-slate-400">Your API Key</p>
+
                 <p>{apiKeyPreview}••••••••••••</p>
               </div>
             ) : (
               <p className="mt-2 text-sm text-slate-700">
                 Subscribe to get an API key
-              </p>
+              </p> 
             )}
           </div>
 
