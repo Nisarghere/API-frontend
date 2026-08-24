@@ -17,47 +17,42 @@ interface ApiSpec {
   description: string;
   baseurl: string;
   ratelimit: RateLimit;
-  apiKey?: string | null;
-}
+ }
 
-const ApiInfo = ({
-  slug,
-  logo,
-  title,
-  category,
-  version,
-  description,
-  baseurl,
-  ratelimit,
-  apiKey: initialApiKey,
-}: ApiSpec) => {
-  const [apiKey, setApiKey] = useState<string | null>(initialApiKey ?? null);
-  const [apiKeyPreview, setapiKeyPreview] = useState<string | null>(null);
-  console.log(apiKeyPreview);
-  const [newApiKey, setnewApiKey] = useState<string | null>(
-    initialApiKey ?? null,
-  );
+const ApiInfo = ({slug,logo, title, category, version, description, baseurl, ratelimit }: ApiSpec) => {
 
-  const [id, setid] = useState("");
+  const [apiKey, setApiKey] = useState<string | null>(null);
+  const [apiKeyPreview, setApiKeyPreview] = useState<string | null>(null);
+  const [subscriptionId, setSubscriptionId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     async function getSubApi() {
-      const response = await fetch(
-        `http://localhost:5000/api/${slug}/apiPreview`,
-        {
-          method: "GET",
-          credentials: "include",
-        },
-      );
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/${slug}/apiPreview`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
 
-      const data = await response.json();
-      setapiKeyPreview(data.apiKeyPreview);
-      setid(data.subscriptionId);
+        const data = await response.json();
+
+        if (!response.ok) {
+          return;
+        }
+
+        setApiKeyPreview(data.apiKeyPreview ?? null);
+        setSubscriptionId(data.subscriptionId ?? null);
+      } catch (error) {
+        console.error(error);
+      }
     }
 
     getSubApi();
-  }, []);
+  }, [slug]);
 
   async function SubscribeApi() {
     try {
@@ -68,73 +63,110 @@ const ApiInfo = ({
         {
           method: "POST",
           credentials: "include",
-        },
+        }
       );
 
       const data = await response.json();
 
       if (!response.ok) {
-        console.log(data.message);
+        throw new Error(data.message || "Subscription failed");
       }
 
       setApiKey(data.apiKey);
+      setApiKeyPreview(data.apiKeyPreview);
+      setSubscriptionId(data.id);
+
       toast.success("Subscribed successfully");
     } catch (error: any) {
       toast.error(error.message || "Something went wrong");
-      console.error(error);
     } finally {
       setLoading(false);
     }
   }
 
   async function rotateApi() {
+    if (!subscriptionId) return;
+
     try {
       setLoading(true);
+
       const response = await fetch(
-        `http://localhost:5000/api/${slug}/${id}/rotate`,
+        `http://localhost:5000/api/${slug}/${subscriptionId}/rotate`,
         {
           method: "PATCH",
           credentials: "include",
-        },
+        }
       );
 
       const data = await response.json();
+
       if (!response.ok) {
         throw new Error(data.message || "Rotation failed");
       }
-      setApiKey(data.apiKey);
-      setapiKeyPreview(data.apiKeyPreview);
 
-      setnewApiKey(data.apiKey);
-    } catch (error) {
-      console.log(error);
+      setApiKey(data.apiKey);
+      // setApiKeyPreview(data.apiKeyPreview);
+
+      toast.success("API key rotated successfully");
+    } catch (error: any) {
+      toast.error(error.message || "Rotation failed");
     } finally {
       setLoading(false);
     }
   }
 
   async function revokeApi() {
+    if (!subscriptionId) return;
+
     try {
       setLoading(true);
+
       const response = await fetch(
-        `http://localhost:5000/api/${slug}/${id}/revoke`,
+        `http://localhost:5000/api/${slug}/${subscriptionId}/revoke`,
         {
           method: "PATCH",
           credentials: "include",
-        },
+        }
       );
 
       const data = await response.json();
-    } catch (error) {
-      console.log(error);
+
+      if (!response.ok) {
+        throw new Error(data.message || "Revoke failed");
+      }
+
+      setApiKey(null);
+      setApiKeyPreview(null);
+
+      toast.success("API key revoked");
+    } catch (error: any) {
+      toast.error(error.message || "Revoke failed");
     } finally {
       setLoading(false);
     }
   }
 
+  async function copyApiKey() {
+    if (!apiKey) return;
+
+    try {
+      await navigator.clipboard.writeText(apiKey);
+      setCopied(true);
+
+     setTimeout(()=>{
+      setCopied(false)
+     }, 1500)
+    } catch {
+      toast.error("Failed to copy API key");
+    }
+  }
+
+  const isSubscribed = !!subscriptionId;
+
   return (
     <div className="space-y-6">
       <ToastContainer />
+
       <div className="rounded-xl border border-slate-200 bg-white p-6">
         <div className="flex items-start justify-between gap-6">
           <div className="flex gap-4">
@@ -171,19 +203,22 @@ const ApiInfo = ({
 
           <button
             onClick={SubscribeApi}
-            disabled={!!apiKey || loading}
+            disabled={isSubscribed || loading}
             className={`rounded-lg px-5 py-2.5 text-sm font-medium text-white transition ${
-              apiKey
+              isSubscribed
                 ? "cursor-not-allowed bg-slate-400"
                 : "bg-blue-600 hover:bg-blue-700"
             }`}
           >
-            {apiKey ? "Subscribed" : loading ? "Subscribing..." : "Subscribe"}
+            {isSubscribed
+              ? "Subscribed"
+              : loading
+                ? "Subscribing..."
+                : "Subscribe"}
           </button>
         </div>
       </div>
 
-      {/* API Overview section */}
       <div className="rounded-xl border border-slate-200 bg-white p-6">
         <h2 className="mb-5 text-lg font-semibold text-slate-900">
           API Overview
@@ -201,35 +236,79 @@ const ApiInfo = ({
           </div>
 
           <div className="rounded-lg border border-slate-200 p-4">
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <p className="text-xs font-medium uppercase text-slate-400">
                 Authentication
               </p>
 
-              <div className="flex gap-4">
-                <button onClick={rotateApi}>Rotate</button>
-                <button onClick={revokeApi}>Revoke</button>
-              </div>
+              {isSubscribed && (
+                <div className="flex gap-3">
+                  <button
+                    onClick={rotateApi}
+                    disabled={loading}
+                    className="text-xs font-medium text-blue-600 transition hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    Rotate
+                  </button>
+
+                  <button
+                    onClick={revokeApi}
+                    disabled={loading}
+                    className="text-xs font-medium text-red-500 transition hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    Revoke
+                  </button>
+                </div>
+              )}
             </div>
 
             {apiKey ? (
-              <div className="mt-2">
-                <p className="mb-1 text-xs text-slate-400">Your API Key</p>
+              <div className="mt-3">
+                <p className="mb-2 text-xs text-slate-400">
+                  Your API Key
+                </p>
 
-                <p className="break-all font-mono text-sm text-slate-700">
-                  {apiKey}
+                <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 p-2">
+                  <code className="min-w-0 flex-1 truncate font-mono text-sm text-slate-700">
+                    {apiKey}
+                  </code>
+
+                  <button
+                    onClick={copyApiKey}
+                    className="shrink-0 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:bg-slate-100"
+                  >
+                    {copied ? "Copied" : "Copy"}
+                  </button>
+                </div>
+
+                <p className="mt-2 text-xs text-slate-400">
+                  Keep this key secure. You will not be able to view it again
+                  after leaving this page.
                 </p>
               </div>
             ) : apiKeyPreview ? (
-              <div>
-                <p className="mb-1 text-xs text-slate-400">Your API Key</p>
+              <div className="mt-3">
+                <p className="mb-2 text-xs text-slate-400">
+                  Your API Key
+                </p>
 
-                <p>{apiKeyPreview}••••••••••••</p>
+                <div className="flex items-center rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5">
+                  <code className="font-mono text-sm tracking-wide text-slate-600">
+                    {apiKeyPreview}
+                    <span className="text-slate-300">
+                      ••••••••••••••••
+                    </span>
+                  </code>
+                </div>
+
+                <p className="mt-2 text-xs text-slate-400">
+                  Your API key is hidden for security.
+                </p>
               </div>
             ) : (
-              <p className="mt-2 text-sm text-slate-700">
-                Subscribe to get an API key
-              </p> 
+              <p className="mt-3 text-sm text-slate-500">
+                Subscribe to get an API key.
+              </p>
             )}
           </div>
 

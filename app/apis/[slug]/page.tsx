@@ -21,6 +21,7 @@ const ApiDetailsPage = async ({ params }: { params: { slug: string } }) => {
     throw new Error("Failed to fetch API details");
   }
   const result = await response.json();
+  
   const data = result.api
   
   return (

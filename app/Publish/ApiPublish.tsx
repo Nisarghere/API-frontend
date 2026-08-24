@@ -36,11 +36,12 @@ const ApiPublish = () => {
   const [logo, setlogo] = useState<File | null>(null);
   const [data, setdata] = useState<ApiResponse | null>(null);
   const [logopreview, setlogopreview] = useState("")
+ 
 
   const [endpoints, setendpoints] = useState<Endpoint[]>([
     {
       id: crypto.randomUUID(),
-      method: "GET",
+      method: "",
       path: "",
       description: "",
     },
@@ -75,7 +76,7 @@ const ApiPublish = () => {
       ...prev,
       {
         id: crypto.randomUUID(),
-        method: "GET",
+        method: "",
         path: "",
         description: "",
       },
@@ -88,9 +89,13 @@ const ApiPublish = () => {
   }
 
   const isDisabled = endpoints.some(
-    (endpoint) => endpoint.path.trim() === "" && endpoint.method.trim() === "",
+    (endpoint) => endpoint.path.trim() === "" || endpoint.method.trim() === "",
   );
 
+   
+  
+  
+    
   useEffect(() => {
 
     if (!logo){
@@ -247,8 +252,7 @@ const ApiPublish = () => {
                 <button
                   onClick={AddPoint}
                   disabled={isDisabled}
-                  className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-                >
+                  className={`rounded-lg border border-slate-200 ${isDisabled ? "bg-slate-400 cursor-not-allowed" : "bg-white hover:bg-slate-50"} px-3 py-2 text-sm font-medium text-slate-700 transition `}                >
                   + Add Endpoint
                 </button>
               </div>
@@ -288,6 +292,7 @@ const ApiPublish = () => {
 
                             <button
                               type="button"
+                              disabled={endpoints.length === 1}
                               onClick={() => DeleteEndpoint(endpoint.id)}
                               className="rounded-lg p-1 text-slate-400 transition hover:bg-red-50 hover:text-red-500"
                               aria-label="Remove endpoint"

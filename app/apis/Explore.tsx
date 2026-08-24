@@ -37,9 +37,9 @@ const Explore = () => {
       });
 
       const data = await response.json();
-      setdata(data);
+       setdata(data);
       setloading(false);
-     }
+    }
     handleApiResponse();
   }, []);
 
