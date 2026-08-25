@@ -23,7 +23,7 @@ const ApiDetailsPage = async ({ params }: { params: { slug: string } }) => {
   const result = await response.json();
   
   const data = result.api
-  
+  console.log(data)
   return (
     <>
       <Navbar />
