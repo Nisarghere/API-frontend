@@ -18,6 +18,7 @@ interface Api {
   category: string;
   logo: string | null;
   endpoints: Endpoint[];
+  description:string;
 }
 
 interface ApiRequest {
@@ -27,6 +28,7 @@ interface ApiRequest {
 
 const Explore = () => {
   const [data, setdata] = useState<ApiRequest | null>(null);
+  console.log(data)
   const [loading, setloading] = useState(true);
 
   useEffect(() => {

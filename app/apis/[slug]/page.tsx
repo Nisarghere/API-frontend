@@ -1,10 +1,8 @@
 import Navbar from "@/app/Navbar/Navbar";
 import ApiHeader from "./ApiHeader";
-// import ApiOverview from "./ApiOverview";
-import CodeExamples from "./Codeexamples";
+ import CodeExamples from "./Codeexamples";
 import EndpointList from "./EndpointList";
-import ResponseExample from "./ResponseExample";
-import { cookies } from "next/headers";
+ import { cookies } from "next/headers";
 
 const ApiDetailsPage = async ({ params }: { params: { slug: string } }) => {
   const { slug } = await params;
@@ -35,10 +33,9 @@ const ApiDetailsPage = async ({ params }: { params: { slug: string } }) => {
  
           <EndpointList endpoints={data.endpoints}/>
 
-          <CodeExamples />
+          <CodeExamples slug={slug} />
 
-          <ResponseExample />
-        </div>
+         </div>
       </div>
     </>
   );
