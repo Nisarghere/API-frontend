@@ -1,8 +1,8 @@
 import Navbar from "@/app/Navbar/Navbar";
 import ApiHeader from "./ApiHeader";
- import CodeExamples from "./Codeexamples";
+import CodeExamples from "./Codeexamples";
 import EndpointList from "./EndpointList";
- import { cookies } from "next/headers";
+import { cookies } from "next/headers";
 
 const ApiDetailsPage = async ({ params }: { params: { slug: string } }) => {
   const { slug } = await params;
@@ -19,23 +19,44 @@ const ApiDetailsPage = async ({ params }: { params: { slug: string } }) => {
     throw new Error("Failed to fetch API details");
   }
   const result = await response.json();
-  
-  const data = result.api
-  console.log(data)
+  const data = result.api;
+
+//OpenApiDocument fetch ->
+
+  const openapiResponse = await fetch(
+    `http://localhost:5000/api/openapi/${slug}`,
+    {
+      method: "GET",
+      headers: {
+        Cookie: `token=${token}`,
+      },
+    },
+  );
+  if (!openapiResponse.ok) {
+    throw new Error("Failed to fetch OpenAPI document");
+  }
+  const openapiDocument = await openapiResponse.json();
+
   return (
     <>
       <Navbar />
       <div className="min-h-screen bg-slate-50 px-6 py-8">
         <div className="mx-auto max-w-6xl space-y-6">
+          <ApiHeader
+            slug={slug}
+            logo={data.logo}
+            baseurl={data.baseUrl}
+            title={data.title}
+            version={data.version}
+            ratelimit={data.ratelimit}
+            category={data.category}
+            description={data.description}
+          />
 
-          <ApiHeader slug={slug} logo={data.logo} baseurl={data.baseUrl} title={data.title} version={data.version} ratelimit={data.ratelimit} category={data.category} description={data.description} />
+          <EndpointList endpoints={data.endpoints} />
 
- 
-          <EndpointList endpoints={data.endpoints}/>
-
-          <CodeExamples slug={slug} />
-
-         </div>
+          <CodeExamples openapiDocument={openapiDocument} />
+        </div>
       </div>
     </>
   );
