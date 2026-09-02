@@ -21,8 +21,7 @@ const ApiDetailsPage = async ({ params }: { params: { slug: string } }) => {
   const result = await response.json();
   const data = result.api;
 
-//OpenApiDocument fetch ->
-
+ 
   const openapiResponse = await fetch(
     `http://localhost:5000/api/openapi/${slug}`,
     {

@@ -29,7 +29,7 @@ interface ApiResponse {
 
 const ApiPublish = () => {
   const [title, setTitle] = useState("");
-  const [description, setdescription] = useState("");
+  const [description, setdescription] = useState(""); 
   const [baseurl, setBaseUrl] = useState("");
   const [version, setversion] = useState("");
   const [category, setcategory] = useState("");
