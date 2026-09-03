@@ -73,7 +73,7 @@ const ApiInfo = ({slug,logo, title, category, version, description, baseurl, rat
       }
 
       setApiKey(data.apiKey);
-      setApiKeyPreview(data.apiKeyPreview);
+      // setApiKeyPreview(data.apiKeyPreview);
       setSubscriptionId(data.id);
 
       toast.success("Subscribed successfully");
