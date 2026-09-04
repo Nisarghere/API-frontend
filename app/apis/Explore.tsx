@@ -1,7 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import SearchBar from "./SearchBar";
+
 import APicard from "./APicard";
+import { ClockFading } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface Endpoint {
   _id: string;
@@ -28,8 +31,15 @@ interface ApiRequest {
 
 const Explore = () => {
   const [data, setdata] = useState<ApiRequest | null>(null);
-  console.log(data);
+  const [SelectedCategory, setSelectedCategory] = useState("All");
   const [loading, setloading] = useState(true);
+
+  const router = useRouter()
+  
+  const  filteredAPI = SelectedCategory === "All" ? data?.apis : data?.apis.filter((api)=>
+    api.category === SelectedCategory
+  )
+  
 
   useEffect(() => {
     async function handleApiResponse() {
@@ -39,7 +49,7 @@ const Explore = () => {
       });
 
       const data = await response.json();
-       setdata(data);
+      setdata(data);
       setloading(false);
     }
     handleApiResponse();
@@ -57,24 +67,59 @@ const Explore = () => {
                 </h2>
                 <div className="mx-auto w-48   border-t border-slate-200" />
               </div>
-              <ul className="text-left  flex flex-col  ">
-                <li className="text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2">
-                  Cybersecurity
+              <ul className="text-left flex flex-col">
+                <li>
+                  <button
+                    onClick={() => setSelectedCategory("All")}
+                    className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2"
+                  >
+                    All
+                  </button>
                 </li>
-                <li className="text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2">
-                  Finance
+
+                <li>
+                  <button
+                    onClick={() => setSelectedCategory("Finance")}
+                    className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2"
+                  >
+                    Finance
+                  </button>
                 </li>
-                <li className="text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2">
-                  Weather
+
+                <li>
+                  <button
+                    onClick={() => setSelectedCategory("Social")}
+                    className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2"
+                  >
+                    Social
+                  </button>
                 </li>
-                <li className="text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2">
-                  Jobs
+
+                <li>
+                  <button
+                    onClick={() => setSelectedCategory("Jobs")}
+                    className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2"
+                  >
+                    Jobs
+                  </button>
                 </li>
-                <li className="text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2">
-                  Movies
+
+                <li>
+                  <button
+                    onClick={() => setSelectedCategory("Movies")}
+                    className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2"
+                  >
+                    Cryptography
+                  </button>
                 </li>
-                <li className="text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2">
-                  Cryptography
+
+                <li>
+                  <button
+                    onClick={() => setSelectedCategory("Cryptography")}
+                    className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2"
+                  >
+                    Other
+                  </button>
                 </li>
               </ul>
             </div>
@@ -92,7 +137,7 @@ const Explore = () => {
               </div>
             ) : (
               <div className="grid grid-cols-3 gap-9 m-3">
-                {data?.apis.map((item) => (
+                {filteredAPI?.map((item) => (
                   <APicard
                     key={item._id}
                     index={item._id}
