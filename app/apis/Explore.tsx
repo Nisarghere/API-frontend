@@ -1,11 +1,10 @@
 "use client";
 import React, { useEffect, useReducer, useState } from "react";
-import SearchBar from "./SearchBar";
 import { Search } from "lucide-react";
-
+import { Globe } from "lucide-react";
+import { useRouter } from "next/navigation";
 import APicard from "./APicard";
 import { ClockFading } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 interface Endpoint {
   _id: string;
@@ -59,8 +58,13 @@ const Explore = () => {
   }, []);
 
   const searchedVal =
-    data?.apis.filter((api) => api.title.toLowerCase().includes(searchInput)) ??
-    [];
+    data?.apis.filter((api) =>
+      api.title.toLowerCase().includes(searchInput.toLowerCase()),
+    ) ?? [];
+
+  function pushApi(apiId: string) {
+    router.push(`/apis/${apiId}`);
+  }
 
   return (
     <div>
@@ -136,23 +140,74 @@ const Explore = () => {
         <div className="border border-[#d9d9da] m-4 rounded-xl">
           <div className="h-25">
             <div className="flex justify-center">
-              <div className="relative  mt-8">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4  text-gray-400" />
+              <div className="relative mt-8 w-100 focus-within:w-110 transition-all duration-300">
+                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4  text-gray-400" />
                 <input
                   value={searchInput}
                   onChange={(e) => setsearchInput(e.target.value)}
                   type="text"
                   placeholder="Search..."
-                  className=" w-100  focus:w-110 focus:py-1.8 duration-300 transition-all  pl-9 pr-3 py-1 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#E4E4E7]"
+                  className=" w-full pl-9 pr-3 py-1 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#E4E4E7]"
                 />
-                <div className="mt-4">
+                <div className="">
                   {searchInput && searchedVal.length > 0 && (
-                    <div className="absolute top-full left-0 w-full bg-white shadow-lg rounded p-2">
-                      {searchedVal.map((api) => (
-                        <div key={api._id}>
-                          <img src={api.logo} alt="" className="h-7 w-7 rounded-full"/>
-                           {api.title}</div>
-                      ))}
+                    <div className="absolute top-full left-0 mt-3 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-xl z-50">
+                      <div className="px-4 py-3 border-b border-gray-100">
+                        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                          APIs ({searchedVal.length})
+                        </p>
+                      </div>
+
+                      <div className="py-1">
+                        {searchedVal.slice(0, 5).map((api) => (
+                          <button
+                            key={api._id}
+                            type="button"
+                            onClick={() => pushApi(api._id)}
+                            className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition-colors duration-150"
+                          >
+                            {api.logo ? (
+                              <img
+                                src={api.logo}
+                                alt=""
+                                className="h-9 w-9 rounded-full object-cover border border-gray-100"
+                              />
+                            ) : (
+                              <div className="h-9 w-9 shrink-0 rounded-full bg-gray-100 flex items-center justify-center">
+                                <Globe className="h-4 w-4 text-gray-500" />
+                              </div>
+                            )}
+
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium text-gray-800 truncate">
+                                {api.title}
+                              </p>
+
+                              <p className="text-xs text-gray-500 truncate mt-0.5">
+                                {api.description}
+                              </p>
+                            </div>
+
+                            <span className="shrink-0 rounded-md bg-gray-100 px-2 py-1 text-[11px] font-medium text-gray-500">
+                              {api.category}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+
+                      <button
+                        type="button"
+                        className="w-full flex items-center gap-2 px-4 py-3 border-t border-gray-100 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+                      >
+                        <Search className="h-4 w-4" />
+
+                        <span>
+                          See all results for{" "}
+                          <span className="font-medium text-gray-800">
+                            "{searchInput}"
+                          </span>
+                        </span>
+                      </button>
                     </div>
                   )}
                 </div>
