@@ -32,20 +32,7 @@ const CodeExamples = ({ openapiDocument }: Props) => {
           </div>
 
           <div className="min-h-48 bg-slate-900 p-5">
-            {/* <pre className="text-sm leading-6 text-slate-300">
-              <code>
-                {`// Code example will appear here
-
-const response = await fetch(
-  "https://api.example.com/v1/weather/Ahmedabad",
-  {
-    headers: {
-      "x-api-key": "YOUR_API_KEY"
-      }
-      }
-      );`}
-              </code>
-            </pre> */}
+             
             
             <ApiReferenceReact
               configuration={{

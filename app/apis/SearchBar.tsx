@@ -1,7 +1,11 @@
 import React from "react";
 import { Search } from "lucide-react";
 
-const SearchBar = () => {
+interface Api {
+  apis:string
+}
+
+const SearchBar = ({apis}:Api) => {
   return (
     <div className="flex justify-center">
       <div className="relative  mt-8">

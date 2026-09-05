@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useReducer, useState } from "react";
 import SearchBar from "./SearchBar";
+import { Search } from "lucide-react";
 
 import APicard from "./APicard";
 import { ClockFading } from "lucide-react";
@@ -33,13 +34,14 @@ const Explore = () => {
   const [data, setdata] = useState<ApiRequest | null>(null);
   const [SelectedCategory, setSelectedCategory] = useState("All");
   const [loading, setloading] = useState(true);
+  const [searchInput, setsearchInput] = useState("");
 
-  const router = useRouter()
-  
-  const  filteredAPI = SelectedCategory === "All" ? data?.apis : data?.apis.filter((api)=>
-    api.category === SelectedCategory
-  )
-  
+  const router = useRouter();
+
+  const filteredAPI =
+    SelectedCategory === "All"
+      ? data?.apis
+      : data?.apis.filter((api) => api.category === SelectedCategory);
 
   useEffect(() => {
     async function handleApiResponse() {
@@ -49,11 +51,16 @@ const Explore = () => {
       });
 
       const data = await response.json();
+      // console.log(data?.apis.title);
       setdata(data);
       setloading(false);
     }
     handleApiResponse();
   }, []);
+
+  const searchedVal =
+    data?.apis.filter((api) => api.title.toLowerCase().includes(searchInput)) ??
+    [];
 
   return (
     <div>
@@ -125,10 +132,34 @@ const Explore = () => {
             </div>
           </div>
         </div>
+
         <div className="border border-[#d9d9da] m-4 rounded-xl">
           <div className="h-25">
-            <SearchBar />
+            <div className="flex justify-center">
+              <div className="relative  mt-8">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4  text-gray-400" />
+                <input
+                  value={searchInput}
+                  onChange={(e) => setsearchInput(e.target.value)}
+                  type="text"
+                  placeholder="Search..."
+                  className=" w-100  focus:w-110 focus:py-1.8 duration-300 transition-all  pl-9 pr-3 py-1 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#E4E4E7]"
+                />
+                <div className="mt-4">
+                  {searchInput && searchedVal.length > 0 && (
+                    <div className="absolute top-full left-0 w-full bg-white shadow-lg rounded p-2">
+                      {searchedVal.map((api) => (
+                        <div key={api._id}>
+                          <img src={api.logo} alt="" className="h-7 w-7 rounded-full"/>
+                           {api.title}</div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
+
           <h2 className="font-semibold text-xl  ml-5 p-3">ALL APIs </h2>
           <div className="flex justify-center">
             {loading ? (

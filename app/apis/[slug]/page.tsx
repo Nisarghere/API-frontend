@@ -52,10 +52,11 @@ const ApiDetailsPage = async ({ params }: { params: { slug: string } }) => {
             description={data.description}
           />
 
-          <EndpointList endpoints={data.endpoints} />
+          <EndpointList endpoints={data.endpoints} />  
 
           <CodeExamples openapiDocument={openapiDocument} />
-        </div>
+        </div> 
+
       </div>
     </>
   );
