@@ -12,3 +12,42 @@
 .animate-marquee:hover {
   animation-play-state: paused;
 }
+
+ 
+/* Scalar */
+
+.scalar-app {
+  background: #ffffff !important;
+}
+
+/* Main documentation text */
+.scalar-app p {
+  color: #475569 !important;
+}
+
+/* Endpoint paths */
+.scalar-app code {
+  color: #0f172a !important;
+}
+
+/* Code examples */
+.scalar-app pre {
+  background: #d9e0e7 !important;
+  border: 1px solid #000000 !important;
+  border-radius: 9px !important;
+}
+
+/* All borders inside Scalar */
+.scalar-app {
+  --scalar-border-color: #102136 !important;
+}
+
+/* Buttons */
+.scalar-app button {
+  border-radius: px !important;
+}
+
+/* Green links/accent */
+.scalar-app a {
+  color: #21ee6c !important;
+}

@@ -13,7 +13,7 @@ interface ApiSpec {
   baseurl: string;
   version: string;
   category: string;
-  description:string;
+  description: string;
   endpoints: Endpoint[];
 }
 
@@ -23,20 +23,19 @@ interface ApiResponse {
   baseurl: string;
   version: string;
   category: string;
-  description:string;
+  description: string;
   endpoints: Endpoint[];
 }
 
 const ApiPublish = () => {
   const [title, setTitle] = useState("");
-  const [description, setdescription] = useState(""); 
+  const [description, setdescription] = useState("");
   const [baseurl, setBaseUrl] = useState("");
   const [version, setversion] = useState("");
   const [category, setcategory] = useState("");
   const [logo, setlogo] = useState<File | null>(null);
   const [data, setdata] = useState<ApiResponse | null>(null);
-  const [logopreview, setlogopreview] = useState("")
- 
+  const [logopreview, setlogopreview] = useState("");
 
   const [endpoints, setendpoints] = useState<Endpoint[]>([
     {
@@ -54,7 +53,7 @@ const ApiPublish = () => {
     formData.append("baseurl", baseurl);
     formData.append("version", version);
     formData.append("category", category);
-    formData.append("description", description)
+    formData.append("description", description);
     formData.append("endpoints", JSON.stringify(endpoints));
     if (logo) formData.append("logo", logo);
 
@@ -66,7 +65,7 @@ const ApiPublish = () => {
       });
 
       const data = await response.json();
-     } catch (err) {
+    } catch (err) {
       console.log("Somethign went wrong : ", err);
     }
   }
@@ -92,25 +91,18 @@ const ApiPublish = () => {
     (endpoint) => endpoint.path.trim() === "" || endpoint.method.trim() === "",
   );
 
-   
-  
-  
-    
   useEffect(() => {
-
-    if (!logo){
-      setlogopreview("")
+    if (!logo) {
+      setlogopreview("");
       return;
     }
-      
-    const url = URL.createObjectURL(logo)
-    setlogopreview(url)
 
-    return ()=> URL.revokeObjectURL(url)
-  }, [logo])
-  
-  
-  
+    const url = URL.createObjectURL(logo);
+    setlogopreview(url);
+
+    return () => URL.revokeObjectURL(url);
+  }, [logo]);
+
   return (
     <>
       <div className="min-h-screen bg-[#F6F8FB] px-6 py-10">
@@ -252,7 +244,8 @@ const ApiPublish = () => {
                 <button
                   onClick={AddPoint}
                   disabled={isDisabled}
-                  className={`rounded-lg border border-slate-200 ${isDisabled ? "bg-slate-400 cursor-not-allowed" : "bg-white hover:bg-slate-50"} px-3 py-2 text-sm font-medium text-slate-700 transition `}                >
+                  className={`rounded-lg border border-slate-200 ${isDisabled ? "bg-slate-400 cursor-not-allowed" : "bg-white hover:bg-slate-50"} px-3 py-2 text-sm font-medium text-slate-700 transition `}
+                >
                   + Add Endpoint
                 </button>
               </div>
