@@ -1,15 +1,33 @@
+"use client";
 import { Search } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SearchStudio from "./SearchStudio";
 
 const Studio = () => {
+  const [data, setdata] = useState([])
+  useEffect(() => {
+    async function handleApiResponse() {
+      const response = await fetch("http://localhost:5000/api/studio", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      const data = await response.json();
+      setdata(data.api)
+      console.log(data.api)
+        
+    }
+    handleApiResponse();
+  }, []);
   return (
     <div className="min-h-screen bg-slate-100">
-      <div className=" relative flex  justify-between relative">
+      <div className=" relative flex  justify-between ">
         <div className="mx-auto">
           <SearchStudio />
         </div>
-        <button className="absolute top-7 right-0 px-4 bg-blue-600 py-2 mr-5 rounded text-white rounded hover:bg-blue-700 font-semibold">+ Add Api Projects</button>
+        <button className="absolute top-7 right-0 px-4 bg-blue-600 py-2 mr-5 rounded text-white rounded hover:bg-blue-700 font-semibold">
+          + Add Api Projects
+        </button>
       </div>
       <div className="m-14 rounded-2xl border border-blue-200 bg-white/50 p-5">
         <div className="flex flex-wrap gap-4">
@@ -21,10 +39,11 @@ const Studio = () => {
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
                     <div className="h-4 w-4 rounded-full bg-blue-500" />
                   </div>
-
+             {
+              data.map((api)=>
                   <div>
                     <h3 className="font-semibold text-slate-800">
-                      Weather API
+                      {api.title}
                     </h3>
 
                     <div className="mt-0.5 flex items-center gap-2">
@@ -41,8 +60,7 @@ const Studio = () => {
               </div>
 
               <p className="mt-5 line-clamp-2 text-sm leading-5 text-slate-500">
-                Get real-time weather information including temperature,
-                humidity, forecast and air quality data.
+                {api.description}
               </p>
             </div>
 
@@ -59,6 +77,8 @@ const Studio = () => {
                 </button>
               </div>
             </div>
+            )
+           }
           </div>
         </div>
       </div>
