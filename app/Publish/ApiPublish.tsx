@@ -1,4 +1,6 @@
 "use client";
+import { Ephesis } from "next/font/google";
+import { useSearchParams } from "next/navigation";
 import React, { useEffect, useEffectEvent, useState } from "react";
 
 interface Endpoint {
@@ -20,7 +22,7 @@ interface ApiSpec {
 interface ApiResponse {
   title: string;
   logo: string | null;
-  baseurl: string;
+  baseUrl: string;
   version: string;
   category: string;
   description: string;
@@ -36,7 +38,6 @@ const ApiPublish = () => {
   const [logo, setlogo] = useState<File | null>(null);
   const [data, setdata] = useState<ApiResponse | null>(null);
   const [logopreview, setlogopreview] = useState("");
-
   const [endpoints, setendpoints] = useState<Endpoint[]>([
     {
       id: crypto.randomUUID(),
@@ -45,6 +46,70 @@ const ApiPublish = () => {
       description: "",
     },
   ]);
+  const [editabledata, seteditabledata] = useState<ApiResponse | null>(null);
+  console.log(editabledata);
+  const searchParams = useSearchParams();
+
+  const editQuery = searchParams.get("edit");
+
+  const isEditing = !!editQuery;
+
+  useEffect(() => {
+    async function handleEdit() {
+      const response = await fetch(`http://localhost:5000/api/${editQuery}`, {
+        method: "GET",
+        credentials: "include",
+      });
+      const data = await response.json();
+      seteditabledata(data.api);
+    }
+
+    handleEdit();
+  }, []);
+
+  useEffect(() => {
+    if (isEditing && editabledata) {
+      setTitle(editabledata.title);
+      setdescription(editabledata.description);
+      setBaseUrl(editabledata.baseUrl);
+      setversion(editabledata.version);
+      setcategory(editabledata.category);
+      setendpoints(
+        editabledata.endpoints.map((endpoint) => ({
+          ...endpoint,
+          id: endpoint._id ?? crypto.randomUUID(),
+        })),
+      );
+    }
+  }, [isEditing, editabledata]);
+
+  async function handleUpdateApi() {
+    const formData = new FormData();
+
+    formData.append("title", title);
+    formData.append("baseurl", baseurl);
+    formData.append("version", version);
+    formData.append("category", category);
+    formData.append("description", description);
+    formData.append("endpoints", JSON.stringify(endpoints));
+    if (logo) formData.append("logo", logo);
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/publish/update/${editQuery}`, {
+        method: "PATCH",
+        credentials: "include",
+        body: formData,
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update API");
+      }
+      const data = await response.json()
+      console.log(data)
+    } catch (err) {
+      console.log("Somethign went wrong : ", err);
+    }
+  }
 
   async function handleApi() {
     const formData = new FormData();
@@ -64,12 +129,17 @@ const ApiPublish = () => {
         body: formData,
       });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to Publish API");
+      }
+
       const data = await response.json();
     } catch (err) {
       console.log("Somethign went wrong : ", err);
     }
   }
-
+  console.log(editabledata?.endpoints);
   function AddPoint() {
     setendpoints((prev) => [
       ...prev,
@@ -109,7 +179,7 @@ const ApiPublish = () => {
         <div className="mx-auto max-w-4xl">
           <div className="mb-8">
             <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-              Publish API
+              {isEditing ? "Edit API" : "Publish API"}
             </h1>
 
             <p className="mt-1 text-sm text-slate-500">
@@ -140,6 +210,8 @@ const ApiPublish = () => {
                     <label className="flex h-30 w-30 items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 text-xs text-slate-400 transition hover:border-slate-400 hover:bg-slate-100">
                       {logo && logopreview ? (
                         <img src={logopreview} alt="AVatar.png" />
+                      ) : isEditing && editabledata?.logo ? (
+                        <img src={editabledata?.logo} alt="AVatar.png" />
                       ) : (
                         <div className="text-[18px] font-semibold">Upload</div>
                       )}
@@ -353,57 +425,25 @@ const ApiPublish = () => {
               </div>
             </section>
 
-            <section className="rounded-xl border border-slate-200 bg-white p-6">
-              <div className="mb-5">
-                <h2 className="text-base font-semibold text-slate-900">
-                  Documentation
-                </h2>
-
-                <p className="mt-1 text-xs text-slate-400">
-                  Connect an OpenAPI specification for interactive
-                  documentation.
-                </p>
-              </div>
-
-              <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
-                  OpenAPI Specification
-                </label>
-
-                <label className="flex cursor-pointer items-center justify-between rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 py-4 hover:border-slate-400">
-                  <div>
-                    <p className="text-sm font-medium text-slate-700">
-                      Upload OpenAPI file
-                    </p>
-                    <p className="mt-1 text-xs text-slate-400">
-                      JSON or YAML specification
-                    </p>
-                  </div>
-
-                  <span className="rounded-md bg-white px-3 py-2 text-xs font-medium text-slate-600 shadow-sm">
-                    Choose File
-                  </span>
-
-                  <input
-                    type="file"
-                    accept=".json,.yaml,.yml"
-                    className="hidden"
-                  />
-                </label>
-              </div>
-            </section>
-
             <div className="flex items-center justify-end gap-3 pb-6">
               <button className="rounded-lg border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50">
                 Cancel
               </button>
-
-              <button
-                onClick={handleApi}
-                className="rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700"
-              >
-                Publish API
-              </button>
+              {isEditing ? (
+                <button
+                  onClick={handleUpdateApi}
+                  className="rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700"
+                >
+                  Update API
+                </button>
+              ) : (
+                <button
+                  onClick={handleApi}
+                  className="rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700"
+                >
+                  Publish API
+                </button>
+              )}
             </div>
           </div>
         </div>
