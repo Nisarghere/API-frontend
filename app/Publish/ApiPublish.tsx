@@ -74,6 +74,7 @@ const ApiPublish = () => {
       setBaseUrl(editabledata.baseUrl);
       setversion(editabledata.version);
       setcategory(editabledata.category);
+      setlogopreview(editabledata.logo ?? "")
       setendpoints(
         editabledata.endpoints.map((endpoint) => ({
           ...endpoint,

@@ -30,54 +30,52 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`sticky top-0 z-50 grid grid-cols-3 items-center border-b border-transparent bg-white/90 backdrop-blur-xl transition-all duration-300 ${
-        scrolled ? "px-8 py-2 shadow-md" : "px-8 py-3"
-      }`}
-    >
-       <Link
-        href={"/"}
-        className={`font-bold cursor-pointer text-emerald-800 transition-all duration-300 ${
-          scrolled ? "text-xl" : "text-2xl"
+  className={`sticky top-0 z-50 grid grid-cols-3 items-center border-b border-slate-200/80 bg-white/90 backdrop-blur-xl transition-all duration-300 ${
+    scrolled ? "px-8 py-2 shadow-sm" : "px-8 py-3"
+  }`}
+>
+   <Link
+    href={"/"}
+    className={`cursor-pointer font-bold text-slate-900 transition-all duration-300 ${
+      scrolled ? "text-xl" : "text-2xl"
+    }`}
+  >
+    Smash<span className="text-blue-600">-API</span>
+  </Link>
+
+   <div className="flex justify-center gap-8">
+    {navlinks.map((link) => (
+      <Link
+        key={link.id}
+        href={link.href}
+        className={`font-medium text-slate-600 transition-all duration-300 hover:text-blue-600 ${
+          scrolled ? "text-sm" : "text-base"
         }`}
       >
-        Smash<span className="text-emerald-400">-API</span>
+        {link.name}
       </Link>
+    ))}
+  </div>
 
-      {/* Nav links */}
-      <div className="flex justify-center gap-8">
-        {navlinks.map((link) => (
-          <Link
-            key={link.id}
-            href={link.href}
-            className={`font-medium text-slate-600 hover:text-emerald-500 transition-all duration-300 ${
-              scrolled ? "text-sm" : "text-base"
-            }`}
-          >
-            {link.name}
-          </Link>
-        ))}
-      </div>
+   <div className="flex justify-end gap-3">
+    <Link
+      href={"signin"}
+      className={`rounded-full font-semibold text-slate-700 transition-all duration-300 hover:text-blue-600 ${
+        scrolled ? "px-4 py-1.5 text-sm" : "px-4 py-2 text-base"
+      }`}
+    >
+      Sign In
+    </Link>
 
-      {/* Buttons */}
-      <div className="flex justify-end gap-3">
-        <Link
-          href={"signin"}
-          className={`rounded-full font-semibold transition-all duration-300 ${
-            scrolled ? "px-4 py-1.5 text-sm" : "px-4 py-2 text-base"
-          }`}
-        >
-          Sign In
-        </Link>
-
-        <Link
-          href={"signup"}
-          className={`rounded-full bg-emerald-400 font-bold text-slate-900 transition-all duration-300 hover:bg-emerald-300 ${
-            scrolled ? "px-5 py-1.5 text-sm" : "px-5 py-2 text-base"
-          }`}
-        >
-          Sign Up
-        </Link>
-      </div>
-    </nav>
+    <Link
+      href={"signup"}
+      className={`rounded-full bg-blue-600 font-semibold text-white transition-all duration-300 hover:bg-blue-700 ${
+        scrolled ? "px-5 py-1.5 text-sm" : "px-5 py-2 text-base"
+      }`}
+    >
+      Sign Up
+    </Link>
+  </div>
+</nav>
   );
 }
