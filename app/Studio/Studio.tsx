@@ -1,8 +1,10 @@
 "use client";
-import { Search } from "lucide-react";
+import {  Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import SearchStudio from "./SearchStudio";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+
 interface Api {
   _id: string;
   title: string;
@@ -41,9 +43,11 @@ const Studio = () => {
         <div className="mx-auto">
           <SearchStudio />
         </div>
+        <Link href="/publish">
         <button className="absolute top-7 right-0 mr-5 rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700">
           + Add Api Projects
         </button>
+        </Link>
       </div>
 
       <div className="m-14 rounded-2xl border border-blue-200 bg-white/50 p-5">
