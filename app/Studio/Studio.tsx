@@ -1,5 +1,5 @@
 "use client";
-import {  Search } from "lucide-react";
+import { Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import SearchStudio from "./SearchStudio";
 import { useRouter } from "next/navigation";
@@ -16,7 +16,7 @@ interface Api {
 
 const Studio = () => {
   const [data, setdata] = useState<Api[]>([]);
-  const router = useRouter();
+   const router = useRouter();
 
   useEffect(() => {
     async function handleApiResponse() {
@@ -31,7 +31,7 @@ const Studio = () => {
     }
     handleApiResponse();
   }, []);
-  
+
 
   function handleEdit(id: string) {
     router.push(`http://localhost:3000/Publish?edit=${id}`);
@@ -41,12 +41,21 @@ const Studio = () => {
     <div className="min-h-screen bg-slate-100">
       <div className="relative flex justify-between">
         <div className="mx-auto">
-          <SearchStudio />
+          <div className="flex justify-center">
+            <div className="relative  mt-8">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4  text-gray-400" />
+              <input
+                  type="text"
+                placeholder="Search..."
+                className=" w-100  focus:w-110 focus:py-1.8 duration-300 transition-all  pl-9 pr-3 py-1 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#E4E4E7]"
+              />
+            </div>
+          </div>
         </div>
-        <Link href="/publish">
-        <button className="absolute top-7 right-0 mr-5 rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700">
-          + Add Api Projects
-        </button>
+        <Link href="/Publish">
+          <button className="absolute top-7 right-0 mr-5 rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700">
+            + Add Api Projects
+          </button>
         </Link>
       </div>
 

@@ -50,7 +50,7 @@ const Explore = () => {
       });
 
       const data = await response.json();
-      // console.log(data?.apis.title);
+      console.log(data?.apis);
       setdata(data);
       setloading(false);
     }

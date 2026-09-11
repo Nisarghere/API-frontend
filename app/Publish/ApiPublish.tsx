@@ -2,6 +2,7 @@
 import { Ephesis } from "next/font/google";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useEffectEvent, useState } from "react";
+import { apiFetch } from "../lib/apiFetch";
 
 interface Endpoint {
   id: string;
@@ -47,25 +48,25 @@ const ApiPublish = () => {
     },
   ]);
   const [editabledata, seteditabledata] = useState<ApiResponse | null>(null);
-  console.log(editabledata);
+   
   const searchParams = useSearchParams();
 
   const editQuery = searchParams.get("edit");
-
   const isEditing = !!editQuery;
 
   useEffect(() => {
-    async function handleEdit() {
-      const response = await fetch(`http://localhost:5000/api/${editQuery}`, {
-        method: "GET",
-        credentials: "include",
-      });
-      const data = await response.json();
-      seteditabledata(data.api);
-    }
+    if (!isEditing) return;
 
+    async function handleEdit() {
+      try {
+        const data = await apiFetch(`http://localhost:5000/api/${editQuery}`);
+        seteditabledata(data.api);
+      } catch (err) {
+        console.log("Something went wrong while loading the API:", err);
+      }
+    }
     handleEdit();
-  }, []);
+  }, [isEditing, editQuery]);
 
   useEffect(() => {
     if (isEditing && editabledata) {
@@ -74,11 +75,11 @@ const ApiPublish = () => {
       setBaseUrl(editabledata.baseUrl);
       setversion(editabledata.version);
       setcategory(editabledata.category);
-      setlogopreview(editabledata.logo ?? "")
+      setlogopreview(editabledata.logo ?? "");
       setendpoints(
-        editabledata.endpoints.map((endpoint) => ({
-          ...endpoint,
-          id: endpoint._id ?? crypto.randomUUID(),
+        editabledata.endpoints.map((endpoints) => ({
+          ...endpoints,
+          id: endpoints._id ?? crypto.randomUUID(),
         })),
       );
     }
@@ -96,17 +97,13 @@ const ApiPublish = () => {
     if (logo) formData.append("logo", logo);
 
     try {
-      const response = await fetch(`http://localhost:5000/api/publish/update/${editQuery}`, {
-        method: "PATCH",
-        credentials: "include",
-        body: formData,
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to update API");
-      }
-      const data = await response.json()
-      console.log(data)
+      const data = await apiFetch(
+        `http://localhost:5000/api/publish/update/${editQuery}`,
+        {
+          method: "PATCH",
+          body: formData,
+        },
+      );
     } catch (err) {
       console.log("Somethign went wrong : ", err);
     }

@@ -1,7 +1,10 @@
 "use client";
 
+import { apiFetch } from "@/app/lib/apiFetch";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+
 
 interface RateLimit {
   window: number;
@@ -34,23 +37,16 @@ const ApiInfo = ({
   const [subscriptionId, setSubscriptionId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const router = useRouter()
 
   useEffect(() => {
     async function getSubApi() {
       try {
-        const response = await fetch(
-          `http://localhost:5000/api/${slug}/apiPreview`,
-          {
-            method: "GET",
-            credentials: "include",
-          },
-        );
+        const data = await apiFetch(
+          `http://localhost:5000/api/${slug}/apiPreview`);
 
-        const data = await response.json();
-
-        if (!response.ok) {
-          return;
-        }
+ 
+        
 
         setApiKeyPreview(data.apiKeyPreview ?? null);
         setSubscriptionId(data.subscriptionId ?? null);
@@ -66,23 +62,17 @@ const ApiInfo = ({
     try {
       setLoading(true);
 
-      const response = await fetch(
+      const data = await apiFetch(
         `http://localhost:5000/api/${slug}/subscribe`,
         {
           method: "POST",
-          credentials: "include",
         },
       );
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Subscription failed");
-      }
-
+ 
+      
       setApiKey(data.apiKey);
-      // setApiKeyPreview(data.apiKeyPreview);
-      setSubscriptionId(data.id);
+       setSubscriptionId(data.id);
 
       toast.success("Subscribed successfully");
     } catch (error: any) {
