@@ -8,10 +8,9 @@ export async function apiFetch(url: string, options: RequestInit = {}) {
     window.location.href = "/signin";
   }
   if (!response.ok) {
-    const errorText = await response.text();
-    console.log("API ERROR:", response.status, errorText);
-
-    throw new Error(`Request failed: ${response.status}`);
+    const errorText = await response.json();
+ 
+    throw new Error(` ${response.status} ${errorText.message} `);
   }
   return response.json();
 }

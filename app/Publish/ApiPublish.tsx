@@ -48,7 +48,11 @@ const ApiPublish = () => {
     },
   ]);
   const [editabledata, seteditabledata] = useState<ApiResponse | null>(null);
-   
+  const [notification, setNotification] = useState("");
+  const [notificationStatus, setNotificationStatus] = useState<
+    "success" | "error" | ""
+  >("success");
+
   const searchParams = useSearchParams();
 
   const editQuery = searchParams.get("edit");
@@ -104,7 +108,25 @@ const ApiPublish = () => {
           body: formData,
         },
       );
+
+      if (data.success) {
+        setNotification(data.message);
+        setNotificationStatus("success");
+      }
+
+      setTimeout(() => {
+        setNotification("");
+        setNotificationStatus("");
+      }, 2000);
     } catch (err) {
+      if (err instanceof Error) {
+        setNotification(err.message);
+        setNotificationStatus("error");
+      }
+      setTimeout(() => {
+        setNotification("");
+        setNotificationStatus("");
+      }, 2000);
       console.log("Somethign went wrong : ", err);
     }
   }
@@ -121,19 +143,38 @@ const ApiPublish = () => {
     if (logo) formData.append("logo", logo);
 
     try {
-      const response = await fetch("http://localhost:5000/api/publish", {
+      const response = await apiFetch("http://localhost:5000/api/publish", {
         method: "POST",
-        credentials: "include",
         body: formData,
       });
+      console.log("SUCCESS RESPONSE:", response);
+      if (response.success) {
+        setNotification(response.message);
+        setNotificationStatus("success");
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to Publish API");
+        setTimeout(() => {
+          setNotification("");
+          setNotificationStatus("");
+        }, 3000);
       }
 
-      const data = await response.json();
+      setlogopreview("");
+      setTitle("");
+      setdescription("");
+      setendpoints([]);
+      setversion("");
+      setcategory("");
+      setBaseUrl("");
     } catch (err) {
+      if (err instanceof Error) {
+        setNotification(err.message);
+        setNotificationStatus("error");
+
+        setTimeout(() => {
+          setNotification("");
+          setNotificationStatus("");
+        }, 3000);
+      }
       console.log("Somethign went wrong : ", err);
     }
   }
@@ -174,6 +215,29 @@ const ApiPublish = () => {
   return (
     <>
       <div className="min-h-screen bg-[#F6F8FB] px-6 py-10">
+        {notification && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20">
+            <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-2xl">
+              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-50">
+                <span className="text-2xl">✓</span>
+              </div>
+
+              <h3 className="text-lg font-semibold text-slate-900">
+                Notification
+              </h3>
+
+              <p className="mt-2 text-sm text-slate-600">{notification}</p>
+
+              <button
+                type="button"
+                onClick={() => setNotification("")}
+                className="mt-5 rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
         <div className="mx-auto max-w-4xl">
           <div className="mb-8">
             <h1 className="text-2xl font-bold tracking-tight text-slate-900">
