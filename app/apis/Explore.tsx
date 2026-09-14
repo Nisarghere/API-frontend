@@ -31,6 +31,7 @@ interface ApiRequest {
 
 const Explore = () => {
   const [data, setdata] = useState<ApiRequest | null>(null);
+console.log("API RESPONSE:", data);
   const [SelectedCategory, setSelectedCategory] = useState("All");
   const [loading, setloading] = useState(true);
   const [searchInput, setsearchInput] = useState("");

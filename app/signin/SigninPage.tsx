@@ -4,7 +4,7 @@ import Link from "next/link";
 import AuthLayout from "../components/AuthLayout";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-
+import { useRouter } from "next/navigation";
 interface SigninPayload {
   email: string;
   password: string;
@@ -14,6 +14,7 @@ export default function SigninPage() {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
 
+  const router = useRouter();
   async function HandleSignIn(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -33,6 +34,9 @@ export default function SigninPage() {
 
       if (response.ok) {
         toast("Login successful");
+        setTimeout(() => {
+          router.push("/");
+        }, 2000);
       } else {
         toast(data.message || "Login failed"); // show backend's actual error if it sends one
       }

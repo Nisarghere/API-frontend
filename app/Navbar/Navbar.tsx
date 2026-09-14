@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { apiFetch } from "../lib/apiFetch";
 import { useRouter } from "next/navigation";
 
-
 interface NavLink {
   id: string;
   name: string;
@@ -22,7 +21,7 @@ export default function Navbar() {
   const [scrolled, setscrolled] = useState(false);
   const [isLoggedIn, setisLoggedIn] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,7 +30,7 @@ export default function Navbar() {
 
     window.addEventListener("scroll", handleScroll);
 
-    return () => removeEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
@@ -53,14 +52,20 @@ export default function Navbar() {
   }, []);
 
   async function handleLogout() {
-    const response = await apiFetch("http://localhost:5000/auth/logout",{
-      method:"POST"
-     })
-     if (response.success){
-      router.push('/')
-      router.refresh()
-     }
+    try {
+      const response = await apiFetch("http://localhost:5000/auth/logout", {
+        method: "POST",
+      });
+
+      if (response.success) {
+        setisLoggedIn(false);
+        router.refresh();
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
+
   return (
     <nav
       className={`sticky top-0 z-50 grid grid-cols-3 items-center border-b border-slate-200/80 bg-white/90 backdrop-blur-xl transition-all duration-300 ${
