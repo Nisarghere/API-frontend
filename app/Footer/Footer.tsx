@@ -2,12 +2,10 @@ import React from "react";
 
 const Footer = () => {
   return (
-    
-<div>
+    <div>
   <footer className="border-t border-slate-200 bg-slate-50/70">
-    <div className="mx-auto max-w-7xl px-6 py-14">
-      <div className="grid gap-10 md:grid-cols-4">
-        {/* Logo */}
+    <div className="mx-auto max-w-7xl px-5 py-10 sm:px-6 sm:py-14">
+      <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4 md:gap-10">
         <div>
           <h2 className="text-2xl font-bold text-slate-900">
             Smash<span className="text-blue-600">-API</span>
@@ -19,7 +17,6 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Product */}
         <div>
           <h3 className="font-semibold text-slate-900">Product</h3>
 
@@ -47,7 +44,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Resources */}
         <div>
           <h3 className="font-semibold text-slate-900">Resources</h3>
 
@@ -75,7 +71,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Community */}
         <div>
           <h3 className="font-semibold text-slate-900">Community</h3>
 
@@ -104,10 +99,10 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="mt-14 flex flex-col gap-4 border-t border-slate-200 pt-6 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
+      <div className="mt-10 flex flex-col gap-4 border-t border-slate-200 pt-6 text-sm text-slate-500 sm:mt-14 md:flex-row md:items-center md:justify-between">
         <p>© 2026 Smash API. All rights reserved.</p>
 
-        <div className="flex gap-6">
+        <div className="flex flex-wrap gap-x-6 gap-y-2">
           <a href="#" className="transition-colors hover:text-blue-600">
             Privacy
           </a>
@@ -122,8 +117,6 @@ const Footer = () => {
     </div>
   </footer>
 </div>
-
-
   );
 };
 

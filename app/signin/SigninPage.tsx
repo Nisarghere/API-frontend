@@ -56,7 +56,7 @@ export default function SigninPage() {
       <ToastContainer />
       <form onSubmit={HandleSignIn} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1.5">
+          <label className="mb-1.5 block text-sm font-medium text-slate-700">
             Email
           </label>
 
@@ -65,12 +65,12 @@ export default function SigninPage() {
             onChange={(e) => setemail(e.target.value)}
             type="email"
             placeholder="you@example.com"
-            className="w-full h-11 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-blue-500 focus:ring-3 focus:ring-blue-100"
+            className="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-3 focus:ring-blue-100 sm:h-11 sm:text-sm"
           />
         </div>
 
         <div>
-          <div className="flex items-center justify-between mb-1.5">
+          <div className="mb-1.5 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
             <label className="text-sm font-medium text-slate-700">
               Password
             </label>
@@ -88,13 +88,13 @@ export default function SigninPage() {
             onChange={(e) => setpassword(e.target.value)}
             type="password"
             placeholder="••••••••"
-            className="w-full h-11 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-blue-500 focus:ring-3 focus:ring-blue-100"
+            className="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-3 focus:ring-blue-100 sm:h-11 sm:text-sm"
           />
         </div>
 
         <button
           type="submit"
-          className="w-full h-11 mt-2 rounded-lg bg-blue-600 text-white text-sm font-medium transition hover:bg-blue-700 active:bg-blue-800"
+          className="mt-2 h-11 w-full rounded-lg bg-blue-600 text-sm font-medium text-white transition hover:bg-blue-700 active:bg-blue-800"
         >
           Sign in
         </button>
