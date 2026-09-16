@@ -31,7 +31,7 @@ interface ApiRequest {
 
 const Explore = () => {
   const [data, setdata] = useState<ApiRequest | null>(null);
-console.log("API RESPONSE:", data);
+  console.log("API RESPONSE:", data);
   const [SelectedCategory, setSelectedCategory] = useState("All");
   const [loading, setloading] = useState(true);
   const [searchInput, setsearchInput] = useState("");
@@ -45,15 +45,22 @@ console.log("API RESPONSE:", data);
 
   useEffect(() => {
     async function handleApiResponse() {
-      const response = await fetch("http://localhost:5000/api/", {
-        method: "GET",
-        credentials: "include",
-      });
+      try {
+        const response = await fetch("http://localhost:5000/api/", {
+          method: "GET",
+          credentials: "include",
+        });
 
-      const data = await response.json();
-      console.log(data?.apis);
-      setdata(data);
-      setloading(false);
+        if (!response.ok) {
+          setdata(null);
+        }
+
+        const data = await response.json();
+        setdata(data);
+        setloading(false);
+      } catch (err) {
+        console.log(err);
+      }
     }
     handleApiResponse();
   }, []);
@@ -142,7 +149,7 @@ console.log("API RESPONSE:", data);
           <div className="h-25">
             <div className="flex justify-center">
               <div className="relative mt-8 w-100 focus-within:w-110 transition-all duration-300">
-                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4  text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4  text-gray-400" />
                 <input
                   value={searchInput}
                   onChange={(e) => setsearchInput(e.target.value)}
@@ -220,7 +227,7 @@ console.log("API RESPONSE:", data);
           <div className="flex justify-center">
             {loading ? (
               <div className="flex justify-center items-center h-[50vh] ">
-                Loading APIs
+                Loading APIs...
               </div>
             ) : (
               <div className="grid grid-cols-3 gap-9 m-3">
