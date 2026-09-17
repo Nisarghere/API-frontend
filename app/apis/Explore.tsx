@@ -1,4 +1,4 @@
-"use client";
+ "use client";
 import React, { useEffect, useReducer, useState } from "react";
 import { Search } from "lucide-react";
 import { Globe } from "lucide-react";
@@ -76,21 +76,21 @@ const Explore = () => {
 
   return (
     <div>
-      <div className="grid grid-cols-[250px_1fr] min-h-screen border border-[#E4E4E7]">
-        <div className="border border-t-0 border-b-0 border-[#c9c9fa] border-l-0  h-full ">
-          <div className="fixed ">
-            <div className="h-full p-5   justify-start text-left">
-              <div className=" flex flex-col justify-between gap-7 mt-5">
+      <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] lg:grid-cols-[250px_1fr] min-h-screen border border-[#E4E4E7]">
+        <div className="border border-t-0 border-b-0 border-[#c9c9fa] border-l-0 h-auto md:h-full">
+          <div className="relative md:fixed">
+            <div className="h-full p-3 sm:p-5 justify-start text-left">
+              <div className="flex flex-col justify-between gap-4 sm:gap-7 mt-2 sm:mt-5">
                 <h2 className="text-sm sticky top-0 font-bold text-[#71717A]">
                   Categories
                 </h2>
-                <div className="mx-auto w-48   border-t border-slate-200" />
+                <div className="w-full sm:w-48 mx-auto border-t border-slate-200" />
               </div>
-              <ul className="text-left flex flex-col">
+              <ul className="text-left flex flex-row md:flex-col overflow-x-auto md:overflow-visible">
                 <li>
                   <button
                     onClick={() => setSelectedCategory("All")}
-                    className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2"
+                    className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2 whitespace-nowrap"
                   >
                     All
                   </button>
@@ -99,7 +99,7 @@ const Explore = () => {
                 <li>
                   <button
                     onClick={() => setSelectedCategory("Finance")}
-                    className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2"
+                    className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2 whitespace-nowrap"
                   >
                     Finance
                   </button>
@@ -108,7 +108,7 @@ const Explore = () => {
                 <li>
                   <button
                     onClick={() => setSelectedCategory("Social")}
-                    className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2"
+                    className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2 whitespace-nowrap"
                   >
                     Social
                   </button>
@@ -117,7 +117,7 @@ const Explore = () => {
                 <li>
                   <button
                     onClick={() => setSelectedCategory("Jobs")}
-                    className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2"
+                    className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2 whitespace-nowrap"
                   >
                     Jobs
                   </button>
@@ -126,7 +126,7 @@ const Explore = () => {
                 <li>
                   <button
                     onClick={() => setSelectedCategory("Movies")}
-                    className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2"
+                    className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2 whitespace-nowrap"
                   >
                     Cryptography
                   </button>
@@ -135,7 +135,7 @@ const Explore = () => {
                 <li>
                   <button
                     onClick={() => setSelectedCategory("Cryptography")}
-                    className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2"
+                    className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2 whitespace-nowrap"
                   >
                     Other
                   </button>
@@ -145,17 +145,17 @@ const Explore = () => {
           </div>
         </div>
 
-        <div className="border border-[#d9d9da] m-4 rounded-xl">
-          <div className="h-25">
-            <div className="flex justify-center">
-              <div className="relative mt-8 w-100 focus-within:w-110 transition-all duration-300">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4  text-gray-400" />
+        <div className="border border-[#d9d9da] m-2 sm:m-4 rounded-xl min-w-0">
+          <div className="h-auto min-h-25">
+            <div className="flex justify-center px-3">
+              <div className="relative mt-5 sm:mt-8 w-full max-w-100 focus-within:max-w-110 transition-all duration-300">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <input
                   value={searchInput}
                   onChange={(e) => setsearchInput(e.target.value)}
                   type="text"
                   placeholder="Search..."
-                  className=" w-full pl-9 pr-3 py-1 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#E4E4E7]"
+                  className="w-full pl-9 pr-3 py-2 sm:py-1 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#E4E4E7]"
                 />
                 <div className="">
                   {searchInput && searchedVal.length > 0 && (
@@ -178,7 +178,7 @@ const Explore = () => {
                               <img
                                 src={api.logo}
                                 alt=""
-                                className="h-9 w-9 rounded-full object-cover border border-gray-100"
+                                className="h-9 w-9 rounded-full object-cover border border-gray-100 shrink-0"
                               />
                             ) : (
                               <div className="h-9 w-9 shrink-0 rounded-full bg-gray-100 flex items-center justify-center">
@@ -207,9 +207,9 @@ const Explore = () => {
                         type="button"
                         className="w-full flex items-center gap-2 px-4 py-3 border-t border-gray-100 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
                       >
-                        <Search className="h-4 w-4" />
+                        <Search className="h-4 w-4 shrink-0" />
 
-                        <span>
+                        <span className="truncate">
                           See all results for{" "}
                           <span className="font-medium text-gray-800">
                             "{searchInput}"
@@ -223,14 +223,14 @@ const Explore = () => {
             </div>
           </div>
 
-          <h2 className="font-semibold text-xl  ml-5 p-3">ALL APIs </h2>
-          <div className="flex justify-center">
+          <h2 className="font-semibold text-xl ml-3 sm:ml-5 p-3">ALL APIs</h2>
+          <div className="flex justify-center px-2 sm:px-3">
             {loading ? (
-              <div className="flex justify-center items-center h-[50vh] ">
+              <div className="flex justify-center items-center h-[50vh]">
                 Loading APIs...
               </div>
             ) : (
-              <div className="grid grid-cols-3 gap-9 m-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-7 lg:gap-9 m-2 sm:m-3 w-full">
                 {filteredAPI?.map((item) => (
                   <APicard
                     key={item._id}
@@ -253,3 +253,4 @@ const Explore = () => {
 };
 
 export default Explore;
+ 
