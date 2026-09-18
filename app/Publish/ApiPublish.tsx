@@ -42,7 +42,7 @@ const ApiPublish = () => {
   const [endpoints, setendpoints] = useState<Endpoint[]>([
     {
       id: crypto.randomUUID(),
-      method: "",
+      method: "GET",
       path: "",
       description: "",
     },
@@ -81,9 +81,10 @@ const ApiPublish = () => {
       setcategory(editabledata.category);
       setlogopreview(editabledata.logo ?? "");
       setendpoints(
-        editabledata.endpoints.map((endpoints) => ({
-          ...endpoints,
-          id: endpoints._id ?? crypto.randomUUID(),
+        editabledata.endpoints.map((ep) => ({
+          ...ep,
+          id: ep._id ?? crypto.randomUUID(),
+          method: (ep.method || "GET").toUpperCase(),
         })),
       );
     }
@@ -161,7 +162,9 @@ const ApiPublish = () => {
       setlogopreview("");
       setTitle("");
       setdescription("");
-      setendpoints([]);
+      setendpoints([
+        { id: crypto.randomUUID(), method: "GET", path: "", description: "" },
+      ]);
       setversion("");
       setcategory("");
       setBaseUrl("");
@@ -184,7 +187,7 @@ const ApiPublish = () => {
       ...prev,
       {
         id: crypto.randomUUID(),
-        method: "",
+        method: "GET",
         path: "",
         description: "",
       },
@@ -196,9 +199,7 @@ const ApiPublish = () => {
     setendpoints(newEndpoint);
   }
 
-  const isDisabled = endpoints.some(
-    (endpoint) => endpoint.path.trim() === "" || endpoint.method.trim() === "",
-  );
+  const isDisabled = endpoints.some((ep) => ep.path.trim() === "");
 
   useEffect(() => {
     if (!logo) {
@@ -358,6 +359,27 @@ const ApiPublish = () => {
                       <option>Utilities</option>
                       <option>Other</option>
                     </select>
+                  </div>
+                  <div className="col-span-2">
+                    <label className="mb-2 col-span-2 block text-sm font-medium text-slate-700">
+                      Rate-Limit
+                    </label>
+                    <div className="flex gap-4">
+                      <input
+                        value={version}
+                        onChange={(e) => setversion(e.target.value)}
+                        type="text"
+                        placeholder=""
+                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none placeholder:text-slate-400 focus:border-slate-400"
+                      />
+                      <input
+                        value={version}
+                        onChange={(e) => setversion(e.target.value)}
+                        type="text"
+                        placeholder=""
+                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none placeholder:text-slate-400 focus:border-slate-400"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
