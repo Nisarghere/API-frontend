@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { PencilLine, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 const Homepage = () => {
+  
   const codeLines = [
     { text: "const res = await fetch(", color: "text-slate-700" },
     {

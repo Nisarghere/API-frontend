@@ -25,7 +25,7 @@ const EndpointList = ({endpoints}:ApiSpec) => {
   <div className="space-y-3">
     {endpoints.map((endpoint) => (
       <div
-        key={endpoint.path}
+        key={endpoint._id}
         className="rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-slate-300 hover:bg-slate-50 hover:shadow-sm"
       >
         <div className="flex items-center gap-3">

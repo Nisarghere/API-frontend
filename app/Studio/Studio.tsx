@@ -6,12 +6,21 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { apiFetch } from "../lib/apiFetch";
 
+
+interface Endpoints {
+  id:string;
+  path:string;
+  method:string;
+  description : string 
+}
+
 interface Api {
   _id: string;
   title: string;
   description: string;
   publisher: string;
   version: string;
+  endpoints:Endpoints[];
   logo: string;
 }
 
@@ -40,7 +49,7 @@ const Studio = () => {
         setdata(result.api ?? []);
       } catch (err) {
         console.log(err);
-      }
+      }    
     }
     handleApiResponse();
   }, []);
@@ -79,7 +88,7 @@ const Studio = () => {
       setTimeout(() => {
         setNotification("");
         setNotificationType("");
-      }, 2000);
+      }, 3000);
     }
   }
 
@@ -187,7 +196,7 @@ const Studio = () => {
               </div>
 
               <div className="mt-6 flex flex-col gap-3 border-t border-blue-50 pt-4 sm:flex-row sm:items-center sm:justify-between">
-                <span className="text-xs text-slate-400">3 endpoints</span>
+                <span className="text-xs text-slate-400">{api.endpoints.length} endpoints</span>
 
                 <div className="flex gap-2">
                   <button

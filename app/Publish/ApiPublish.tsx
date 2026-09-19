@@ -10,6 +10,10 @@ interface Endpoint {
   path: string;
   description: string;
 }
+interface Ratelimit {
+  window: number;
+  requests: number;
+}
 
 interface ApiSpec {
   title: string;
@@ -39,6 +43,10 @@ const ApiPublish = () => {
   const [logo, setlogo] = useState<File | null>(null);
   const [data, setdata] = useState<ApiResponse | null>(null);
   const [logopreview, setlogopreview] = useState("");
+  const [rateLimit, setrateLimit] = useState<Ratelimit>({
+    window: 60,
+    requests: 100,
+  });
   const [endpoints, setendpoints] = useState<Endpoint[]>([
     {
       id: crypto.randomUUID(),
@@ -98,6 +106,7 @@ const ApiPublish = () => {
     formData.append("version", version);
     formData.append("category", category);
     formData.append("description", description);
+    formData.append("ratelimit", JSON.stringify(rateLimit));
     formData.append("endpoints", JSON.stringify(endpoints));
     if (logo) formData.append("logo", logo);
 
@@ -140,6 +149,7 @@ const ApiPublish = () => {
     formData.append("version", version);
     formData.append("category", category);
     formData.append("description", description);
+    formData.append("ratelimit", JSON.stringify(rateLimit));
     formData.append("endpoints", JSON.stringify(endpoints));
     if (logo) formData.append("logo", logo);
 
@@ -352,12 +362,11 @@ const ApiPublish = () => {
                       className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 outline-none focus:border-slate-400"
                     >
                       <option>Select category</option>
+                       <option>Products</option>
                       <option>Weather</option>
-                      <option>Finance</option>
-                      <option>AI</option>
-                      <option>Social</option>
-                      <option>Utilities</option>
-                      <option>Other</option>
+                      <option>Development</option>
+                      <option>Games</option>
+                       <option>Other</option>
                     </select>
                   </div>
                   <div className="col-span-2">
@@ -366,17 +375,29 @@ const ApiPublish = () => {
                     </label>
                     <div className="flex gap-4">
                       <input
-                        value={version}
-                        onChange={(e) => setversion(e.target.value)}
-                        type="text"
-                        placeholder=""
+                        value={rateLimit.window}
+                        onChange={(e) =>
+                          setrateLimit((prev) => ({
+                            ...prev,
+                            window: Number(e.target.value),
+                          }))
+                        }
+                        type="number"
+                        min="1"
+                        placeholder="Window"
                         className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none placeholder:text-slate-400 focus:border-slate-400"
                       />
                       <input
-                        value={version}
-                        onChange={(e) => setversion(e.target.value)}
-                        type="text"
-                        placeholder=""
+                        value={rateLimit.requests}
+                        onChange={(e) =>
+                          setrateLimit((prev) => ({
+                            ...prev,
+                            requests: Number(e.target.value),
+                          }))
+                        }
+                        type="number"
+                        min="1"
+                        placeholder="Requests"
                         className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none placeholder:text-slate-400 focus:border-slate-400"
                       />
                     </div>
@@ -427,6 +448,7 @@ const ApiPublish = () => {
                         className="mt-6 h-9 w-20 shrink-0 cursor-pointer rounded bg-emerald-100 px-3 text-sm font-semibold text-emerald-600 outline-none"
                       >
                         <option>GET</option>
+                        <option>PUT</option>
                         <option>POST</option>
                         <option>PATCH</option>
                       </select>

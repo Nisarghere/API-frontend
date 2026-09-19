@@ -98,43 +98,43 @@ const Explore = () => {
 
                 <li>
                   <button
-                    onClick={() => setSelectedCategory("Finance")}
+                    onClick={() => setSelectedCategory("Weather")}
                     className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2 whitespace-nowrap"
                   >
-                    Finance
+                    Weather
                   </button>
                 </li>
 
                 <li>
                   <button
-                    onClick={() => setSelectedCategory("Social")}
+                    onClick={() => setSelectedCategory("Products")}
                     className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2 whitespace-nowrap"
                   >
-                    Social
+                    Products
                   </button>
                 </li>
 
                 <li>
                   <button
-                    onClick={() => setSelectedCategory("Jobs")}
+                    onClick={() => setSelectedCategory("Development")}
                     className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2 whitespace-nowrap"
                   >
-                    Jobs
+                    Development
                   </button>
                 </li>
 
                 <li>
                   <button
-                    onClick={() => setSelectedCategory("Movies")}
+                    onClick={() => setSelectedCategory("Games")}
                     className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2 whitespace-nowrap"
                   >
-                    Cryptography
+                    Games
                   </button>
                 </li>
 
                 <li>
                   <button
-                    onClick={() => setSelectedCategory("Cryptography")}
+                    onClick={() => setSelectedCategory("Other")}
                     className="w-full text-left text-[#0F172A] text-sm font-semibold hover:bg-[#e9fae9] cursor-pointer hover:-translate-y-0.5 transition duration-300 py-3 px-2 whitespace-nowrap"
                   >
                     Other
